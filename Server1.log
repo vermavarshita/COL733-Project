@@ -1,0 +1,185 @@
+2024-11-18 14:47:32,762 - Server1 - INFO - Logging started for Server1
+2024-11-18 14:47:32,762 - Server1 - INFO - Server Server1 started on 0.0.0.0:8001
+2024-11-18 14:47:32,763 - Server1 - INFO - Received acknowledgment from Server2 on request channel.
+2024-11-18 14:47:32,763 - Server1 - INFO - Received acknowledgment from Server2 on gossip channel.
+2024-11-18 14:47:32,764 - Server1 - INFO - Received acknowledgment from Server2 on transfer channel.
+2024-11-18 14:47:32,764 - Server1 - INFO - Connected to server Server2 at 127.0.0.1:8002
+2024-11-18 14:47:32,764 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'request', 'type': 'prompt', 'text': 'Hello on request channel', 'id': 'c4d2e403-0340-495b-8752-dc249b39bbe8'} to Server2 on request channel.
+2024-11-18 14:47:32,764 - Server1 - INFO - Waiting for a reply for ID c4d2e403-0340-495b-8752-dc249b39bbe8
+2024-11-18 14:47:32,764 - Server1 - INFO - Reply added for ID c4d2e403-0340-495b-8752-dc249b39bbe8
+2024-11-18 14:47:32,764 - Server1 - INFO - Reply received: {"source": "Server2", "destination": "Server1", "channel": "request", "type": "reply", "text": "Hello on request channel", "id": "c4d2e403-0340-495b-8752-dc249b39bbe8"}
+2024-11-18 14:47:32,764 - Server1 - INFO - Received gossip message: {"source": "Server2", "destination": "Server1", "channel": "gossip", "type": "notification", "text": "Hello on gossip channel", "id": "4bcf433f-5ad2-4178-8b1d-75333f8b62b3"}
+2024-11-18 14:47:34,809 - Server1 - CRITICAL - Error handling request channel: [Errno 9] Bad file descriptor
+2024-11-18 14:47:34,809 - Server1 - CRITICAL - Error handling gossip channel: [Errno 9] Bad file descriptor
+2024-11-18 14:47:34,809 - Server1 - CRITICAL - Error handling transfer channel: [Errno 9] Bad file descriptor
+2024-11-18 14:47:34,809 - Server1 - INFO - Server Server1 stopped.
+2024-11-18 14:48:24,055 - Server1 - INFO - Logging started for Server1
+2024-11-18 14:48:24,055 - Server1 - INFO - Server Server1 started on 0.0.0.0:8001
+2024-11-18 14:48:24,056 - Server1 - INFO - Received acknowledgment from Server2 on request channel.
+2024-11-18 14:48:24,056 - Server1 - INFO - Received acknowledgment from Server2 on gossip channel.
+2024-11-18 14:48:24,056 - Server1 - INFO - Received acknowledgment from Server2 on transfer channel.
+2024-11-18 14:48:24,057 - Server1 - INFO - Connected to server Server2 at 127.0.0.1:8002
+2024-11-18 14:48:24,057 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'request', 'type': 'prompt', 'text': 'Hello on request channel', 'id': '19f4bd4a-2589-4a3d-afe1-45ddc06bba63'} to Server2 on request channel.
+2024-11-18 14:48:24,057 - Server1 - INFO - Waiting for a reply for ID 19f4bd4a-2589-4a3d-afe1-45ddc06bba63
+2024-11-18 14:48:24,057 - Server1 - INFO - Reply added for ID 19f4bd4a-2589-4a3d-afe1-45ddc06bba63
+2024-11-18 14:48:24,057 - Server1 - INFO - Reply received: {"source": "Server2", "destination": "Server1", "channel": "request", "type": "reply", "text": "Hello on request channel", "id": "19f4bd4a-2589-4a3d-afe1-45ddc06bba63"}
+2024-11-18 14:48:24,057 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'transfer', 'type': 'notification', 'text': 'Hello on transfer channel', 'id': '84417ee3-555d-4fbe-92b6-c3a6fd87ad81'} to Server2 on transfer channel.
+2024-11-18 14:48:24,057 - Server1 - INFO - Received gossip message: {"source": "Server2", "destination": "Server1", "channel": "gossip", "type": "notification", "text": "Hello on gossip channel", "id": "edbfb17b-3c75-45ff-9c86-b1759e26e36d"}
+2024-11-18 14:48:24,057 - Server1 - CRITICAL - Error handling request channel: [Errno 9] Bad file descriptor
+2024-11-18 14:48:24,057 - Server1 - CRITICAL - Error handling gossip channel: [Errno 9] Bad file descriptor
+2024-11-18 14:48:24,057 - Server1 - CRITICAL - Error handling transfer channel: [Errno 9] Bad file descriptor
+2024-11-18 14:48:24,058 - Server1 - INFO - Server Server1 stopped.
+2024-11-18 14:48:46,495 - Server1 - INFO - Logging started for Server1
+2024-11-18 14:48:46,495 - Server1 - INFO - Server Server1 started on 0.0.0.0:8001
+2024-11-18 14:48:46,496 - Server1 - INFO - Received acknowledgment from Server2 on request channel.
+2024-11-18 14:48:46,497 - Server1 - INFO - Received acknowledgment from Server2 on gossip channel.
+2024-11-18 14:48:46,497 - Server1 - INFO - Received acknowledgment from Server2 on transfer channel.
+2024-11-18 14:48:46,497 - Server1 - INFO - Connected to server Server2 at 127.0.0.1:8002
+2024-11-18 14:48:46,497 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'request', 'type': 'prompt', 'text': 'Hello on request channel', 'id': '9008a315-219b-4cdd-8545-d4b1dfdd2802'} to Server2 on request channel.
+2024-11-18 14:48:46,497 - Server1 - INFO - Waiting for a reply for ID 9008a315-219b-4cdd-8545-d4b1dfdd2802
+2024-11-18 14:48:46,498 - Server1 - INFO - Reply added for ID 9008a315-219b-4cdd-8545-d4b1dfdd2802
+2024-11-18 14:48:46,498 - Server1 - INFO - Reply received: {"source": "Server2", "destination": "Server1", "channel": "request", "type": "reply", "text": "Hello on request channel", "id": "9008a315-219b-4cdd-8545-d4b1dfdd2802"}
+2024-11-18 14:48:46,498 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'transfer', 'type': 'notification', 'text': 'Hello on transfer channel', 'id': '1699326f-c92b-423f-9786-39860e3f485e'} to Server2 on transfer channel.
+2024-11-18 14:48:46,498 - Server1 - INFO - Received gossip message: {"source": "Server2", "destination": "Server1", "channel": "gossip", "type": "notification", "text": "Hello on gossip channel", "id": "a06d6756-ed45-417d-ba04-19b3daa39a28"}
+2024-11-18 14:48:46,498 - Server1 - CRITICAL - Error handling request channel: [Errno 9] Bad file descriptor
+2024-11-18 14:48:46,498 - Server1 - INFO - Server Server1 stopped.
+2024-11-18 14:48:46,498 - Server1 - CRITICAL - Error handling transfer channel: [Errno 9] Bad file descriptor
+2024-11-18 14:51:11,507 - Server1 - INFO - Logging started for Server1
+2024-11-18 14:51:11,507 - Server1 - INFO - Server Server1 started on 0.0.0.0:8001
+2024-11-18 14:51:11,508 - Server1 - INFO - Received acknowledgment from Server2 on request channel.
+2024-11-18 14:51:11,508 - Server1 - INFO - Received acknowledgment from Server2 on gossip channel.
+2024-11-18 14:51:11,508 - Server1 - INFO - Received acknowledgment from Server2 on transfer channel.
+2024-11-18 14:51:11,509 - Server1 - INFO - Connected to server Server2 at 127.0.0.1:8002
+2024-11-18 14:51:11,509 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'request', 'type': 'prompt', 'text': 'Hello on request channel', 'id': 'f130f885-778e-4cee-8135-651c36ed7e54'} to Server2 on request channel.
+2024-11-18 14:51:11,509 - Server1 - INFO - Waiting for a reply for ID f130f885-778e-4cee-8135-651c36ed7e54
+2024-11-18 14:51:11,509 - Server1 - INFO - Reply added for ID f130f885-778e-4cee-8135-651c36ed7e54
+2024-11-18 14:51:11,509 - Server1 - INFO - Reply received: {"source": "Server2", "destination": "Server1", "channel": "request", "type": "reply", "text": "Hello on request channel", "id": "f130f885-778e-4cee-8135-651c36ed7e54"}
+2024-11-18 14:51:11,509 - Server1 - INFO - Received gossip message: {"source": "Server2", "destination": "Server1", "channel": "gossip", "type": "notification", "text": "Hello on gossip channel", "id": "e4d3c905-d4d2-4571-b109-6a405df95ffa"}
+2024-11-18 14:51:11,509 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'transfer', 'type': 'notification', 'text': 'Hello on transfer channel', 'id': '70586ac8-1859-4dd5-9224-c0d715d29b0d'} to Server2 on transfer channel.
+2024-11-18 14:51:11,509 - Server1 - CRITICAL - Error handling request channel: [Errno 9] Bad file descriptor
+2024-11-18 14:51:11,510 - Server1 - CRITICAL - Error handling gossip channel: [Errno 9] Bad file descriptor
+2024-11-18 14:51:11,510 - Server1 - INFO - Server Server1 stopped.
+2024-11-18 14:51:11,510 - Server1 - CRITICAL - Error handling transfer channel: [Errno 9] Bad file descriptor
+2024-11-18 14:51:30,320 - Server1 - INFO - Logging started for Server1
+2024-11-18 14:51:30,321 - Server1 - INFO - Server Server1 started on 0.0.0.0:8001
+2024-11-18 14:51:30,322 - Server1 - INFO - Received acknowledgment from Server2 on request channel.
+2024-11-18 14:51:30,322 - Server1 - INFO - Received acknowledgment from Server2 on gossip channel.
+2024-11-18 14:51:30,323 - Server1 - INFO - Received acknowledgment from Server2 on transfer channel.
+2024-11-18 14:51:30,323 - Server1 - INFO - Connected to server Server2 at 127.0.0.1:8002
+2024-11-18 14:51:30,323 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'request', 'type': 'prompt', 'text': 'Hello on request channel', 'id': 'd9e42e5b-2cdc-4d32-9b40-c61af4e3952a'} to Server2 on request channel.
+2024-11-18 14:51:30,323 - Server1 - INFO - Waiting for a reply for ID d9e42e5b-2cdc-4d32-9b40-c61af4e3952a
+2024-11-18 14:51:30,323 - Server1 - INFO - Reply added for ID d9e42e5b-2cdc-4d32-9b40-c61af4e3952a
+2024-11-18 14:51:30,323 - Server1 - INFO - Reply received: {"source": "Server2", "destination": "Server1", "channel": "request", "type": "reply", "text": "Hello on request channel", "id": "d9e42e5b-2cdc-4d32-9b40-c61af4e3952a"}
+2024-11-18 14:51:30,323 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'transfer', 'type': 'notification', 'text': 'Hello on transfer channel', 'id': 'e4f773ac-7c65-4567-9000-6ac4cfd53ebd'} to Server2 on transfer channel.
+2024-11-18 14:51:30,323 - Server1 - INFO - Received gossip message: {"source": "Server2", "destination": "Server1", "channel": "gossip", "type": "notification", "text": "Hello on gossip channel", "id": "92cd99ce-61b0-4d03-a777-96ae2be7a127"}
+2024-11-18 14:51:30,324 - Server1 - CRITICAL - Error handling request channel: [Errno 9] Bad file descriptor
+2024-11-18 14:51:30,324 - Server1 - CRITICAL - Error handling gossip channel: [Errno 9] Bad file descriptor
+2024-11-18 14:51:30,324 - Server1 - CRITICAL - Error handling transfer channel: [Errno 9] Bad file descriptor
+2024-11-18 14:51:30,324 - Server1 - INFO - Server Server1 stopped.
+2024-11-18 14:51:41,151 - Server1 - INFO - Logging started for Server1
+2024-11-18 14:51:41,151 - Server1 - INFO - Server Server1 started on 0.0.0.0:8001
+2024-11-18 14:51:41,152 - Server1 - INFO - Received acknowledgment from Server2 on request channel.
+2024-11-18 14:51:41,152 - Server1 - INFO - Received acknowledgment from Server2 on gossip channel.
+2024-11-18 14:51:41,153 - Server1 - INFO - Received acknowledgment from Server2 on transfer channel.
+2024-11-18 14:51:41,153 - Server1 - INFO - Connected to server Server2 at 127.0.0.1:8002
+2024-11-18 14:51:41,153 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'request', 'type': 'prompt', 'text': 'Hello on request channel', 'id': 'aaf296d7-9ba8-4d12-9321-956cf4917924'} to Server2 on request channel.
+2024-11-18 14:51:41,153 - Server1 - INFO - Waiting for a reply for ID aaf296d7-9ba8-4d12-9321-956cf4917924
+2024-11-18 14:51:41,153 - Server1 - INFO - Reply added for ID aaf296d7-9ba8-4d12-9321-956cf4917924
+2024-11-18 14:51:41,153 - Server1 - INFO - Reply received: {"source": "Server2", "destination": "Server1", "channel": "request", "type": "reply", "text": "Hello on request channel", "id": "aaf296d7-9ba8-4d12-9321-956cf4917924"}
+2024-11-18 14:51:41,153 - Server1 - INFO - Received gossip message: {"source": "Server2", "destination": "Server1", "channel": "gossip", "type": "notification", "text": "Hello on gossip channel", "id": "485bf5f7-7020-4386-8f98-f70cf7294cc9"}
+2024-11-18 14:51:41,153 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'transfer', 'type': 'notification', 'text': 'Hello on transfer channel', 'id': '03807d88-c1a6-4953-9009-0f0df6e08f96'} to Server2 on transfer channel.
+2024-11-18 14:51:41,154 - Server1 - CRITICAL - Error handling request channel: [Errno 9] Bad file descriptor
+2024-11-18 14:51:41,154 - Server1 - CRITICAL - Error handling gossip channel: [Errno 9] Bad file descriptor
+2024-11-18 14:51:41,154 - Server1 - CRITICAL - Error handling transfer channel: [Errno 9] Bad file descriptor
+2024-11-18 14:51:41,154 - Server1 - INFO - Server Server1 stopped.
+2024-11-18 14:51:42,370 - Server1 - INFO - Logging started for Server1
+2024-11-18 14:51:42,370 - Server1 - INFO - Server Server1 started on 0.0.0.0:8001
+2024-11-18 14:51:42,371 - Server1 - INFO - Received acknowledgment from Server2 on request channel.
+2024-11-18 14:51:42,371 - Server1 - INFO - Received acknowledgment from Server2 on gossip channel.
+2024-11-18 14:51:42,371 - Server1 - INFO - Received acknowledgment from Server2 on transfer channel.
+2024-11-18 14:51:42,372 - Server1 - INFO - Connected to server Server2 at 127.0.0.1:8002
+2024-11-18 14:51:42,372 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'request', 'type': 'prompt', 'text': 'Hello on request channel', 'id': 'b1d2bbdb-fbfe-4a00-a432-99f1974978a9'} to Server2 on request channel.
+2024-11-18 14:51:42,372 - Server1 - INFO - Waiting for a reply for ID b1d2bbdb-fbfe-4a00-a432-99f1974978a9
+2024-11-18 14:51:42,372 - Server1 - INFO - Reply added for ID b1d2bbdb-fbfe-4a00-a432-99f1974978a9
+2024-11-18 14:51:42,372 - Server1 - INFO - Reply received: {"source": "Server2", "destination": "Server1", "channel": "request", "type": "reply", "text": "Hello on request channel", "id": "b1d2bbdb-fbfe-4a00-a432-99f1974978a9"}
+2024-11-18 14:51:42,372 - Server1 - INFO - Received gossip message: {"source": "Server2", "destination": "Server1", "channel": "gossip", "type": "notification", "text": "Hello on gossip channel", "id": "3e2203a1-5a57-45fe-9a88-4c6a8c9dca96"}
+2024-11-18 14:51:42,372 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'transfer', 'type': 'notification', 'text': 'Hello on transfer channel', 'id': '5ce244ae-08ef-4ce2-816b-c4a18b3e70ed'} to Server2 on transfer channel.
+2024-11-18 14:51:42,373 - Server1 - CRITICAL - Error handling request channel: [Errno 9] Bad file descriptor
+2024-11-18 14:51:42,373 - Server1 - CRITICAL - Error handling transfer channel: [Errno 9] Bad file descriptor
+2024-11-18 14:51:42,373 - Server1 - INFO - Server Server1 stopped.
+2024-11-18 14:52:14,802 - Server1 - INFO - Logging started for Server1
+2024-11-18 14:52:14,802 - Server1 - INFO - Server Server1 started on 0.0.0.0:8001
+2024-11-18 14:52:14,803 - Server1 - INFO - Received acknowledgment from Server2 on request channel.
+2024-11-18 14:52:14,803 - Server1 - INFO - Received acknowledgment from Server2 on gossip channel.
+2024-11-18 14:52:14,804 - Server1 - INFO - Received acknowledgment from Server2 on transfer channel.
+2024-11-18 14:52:14,804 - Server1 - INFO - Connected to server Server2 at 127.0.0.1:8002
+2024-11-18 14:52:14,804 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'request', 'type': 'prompt', 'text': 'Hello on request channel', 'id': '37996836-5dd6-4f32-80d5-b9811dfbe9aa'} to Server2 on request channel.
+2024-11-18 14:52:14,804 - Server1 - INFO - Waiting for a reply for ID 37996836-5dd6-4f32-80d5-b9811dfbe9aa
+2024-11-18 14:52:14,804 - Server1 - INFO - Reply added for ID 37996836-5dd6-4f32-80d5-b9811dfbe9aa
+2024-11-18 14:52:14,804 - Server1 - INFO - Reply received: {"source": "Server2", "destination": "Server1", "channel": "request", "type": "reply", "text": "Hello on request channel", "id": "37996836-5dd6-4f32-80d5-b9811dfbe9aa"}
+2024-11-18 14:52:14,804 - Server1 - INFO - Received gossip message: {"source": "Server2", "destination": "Server1", "channel": "gossip", "type": "notification", "text": "Hello on gossip channel", "id": "c6cb236f-4d9f-4e34-84b8-5b6aba1e6705"}
+2024-11-18 14:52:14,804 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'transfer', 'type': 'notification', 'text': 'Hello on transfer channel', 'id': '3c24ea48-9679-4888-a79c-9e2950dc39e7'} to Server2 on transfer channel.
+2024-11-18 14:52:14,804 - Server1 - CRITICAL - Error handling request channel: [Errno 9] Bad file descriptor
+2024-11-18 14:52:14,805 - Server1 - CRITICAL - Error handling transfer channel: [Errno 9] Bad file descriptor
+2024-11-18 14:52:14,805 - Server1 - INFO - Server Server1 stopped.
+2024-11-18 14:52:14,805 - Server1 - CRITICAL - Error handling gossip channel: [Errno 9] Bad file descriptor
+2024-11-18 14:57:53,920 - Server1 - INFO - Logging started for Server1
+2024-11-18 14:57:53,920 - Server1 - INFO - Server Server1 started on 0.0.0.0:8001
+2024-11-18 14:57:53,921 - Server1 - INFO - Received acknowledgment from Server2 on request channel.
+2024-11-18 14:57:53,922 - Server1 - INFO - Received acknowledgment from Server2 on gossip channel.
+2024-11-18 14:57:53,922 - Server1 - INFO - Received acknowledgment from Server2 on transfer channel.
+2024-11-18 14:57:53,922 - Server1 - INFO - Connected to server Server2 at 127.0.0.1:8002
+2024-11-18 14:57:53,922 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'request', 'type': 'prompt', 'text': 'Hello on request channel', 'id': '54d49e25-dbd7-4448-94cf-ae0df79e1fee'} to Server2 on request channel.
+2024-11-18 14:57:53,922 - Server1 - INFO - Waiting for a reply for ID 54d49e25-dbd7-4448-94cf-ae0df79e1fee
+2024-11-18 14:57:53,923 - Server1 - INFO - Reply added for ID 54d49e25-dbd7-4448-94cf-ae0df79e1fee
+2024-11-18 14:57:53,923 - Server1 - INFO - Reply received: {"source": "Server2", "destination": "Server1", "channel": "request", "type": "reply", "text": "Hello on request channel", "id": "54d49e25-dbd7-4448-94cf-ae0df79e1fee"}
+2024-11-18 14:57:53,923 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'transfer', 'type': 'notification', 'text': 'Hello on transfer channel', 'id': '3f0ec019-f309-481a-927b-3e3b578057f9'} to Server2 on transfer channel.
+2024-11-18 14:57:53,923 - Server1 - INFO - Received gossip message: {"source": "Server2", "destination": "Server1", "channel": "gossip", "type": "notification", "text": "Hello on gossip channel", "id": "8f0563ec-fcd4-46d4-bc32-1c69adf87576"}
+2024-11-18 14:57:53,923 - Server1 - CRITICAL - Error handling request channel: [Errno 9] Bad file descriptor
+2024-11-18 14:57:53,923 - Server1 - CRITICAL - Error handling gossip channel: [Errno 9] Bad file descriptor
+2024-11-18 14:57:53,923 - Server1 - CRITICAL - Error handling transfer channel: [Errno 9] Bad file descriptor
+2024-11-18 14:57:53,924 - Server1 - INFO - Server Server1 stopped.
+2024-11-18 14:58:43,344 - Server1 - INFO - Logging started for Server1
+2024-11-18 14:58:43,344 - Server1 - INFO - Server Server1 started on 0.0.0.0:8001
+2024-11-18 14:58:43,345 - Server1 - INFO - Received acknowledgment from Server2 on request channel.
+2024-11-18 14:58:43,346 - Server1 - INFO - Received acknowledgment from Server2 on gossip channel.
+2024-11-18 14:58:43,346 - Server1 - INFO - Received acknowledgment from Server2 on transfer channel.
+2024-11-18 14:58:43,346 - Server1 - INFO - Connected to server Server2 at 127.0.0.1:8002
+2024-11-18 14:58:43,346 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'request', 'type': 'prompt', 'text': 'Hello on request channel', 'id': '6cc2e40a-afa4-444c-8882-27ba7ee9eb72'} to Server2 on request channel.
+2024-11-18 14:58:43,346 - Server1 - INFO - Waiting for a reply for ID 6cc2e40a-afa4-444c-8882-27ba7ee9eb72
+2024-11-18 14:58:43,347 - Server1 - INFO - Reply added for ID 6cc2e40a-afa4-444c-8882-27ba7ee9eb72
+2024-11-18 14:58:43,347 - Server1 - INFO - Reply received: {"source": "Server2", "destination": "Server1", "channel": "request", "type": "reply", "text": "Hello on request channel", "id": "6cc2e40a-afa4-444c-8882-27ba7ee9eb72"}
+2024-11-18 14:58:43,347 - Server1 - INFO - Received gossip message: {"source": "Server2", "destination": "Server1", "channel": "gossip", "type": "notification", "text": "Hello on gossip channel", "id": "1e3ed702-3df1-486a-942e-56cdc5a4c346"}
+2024-11-18 14:58:43,347 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'transfer', 'type': 'notification', 'text': 'Hello on transfer channel', 'id': '83a5bcec-9231-43c4-9ea1-24089f21aee7'} to Server2 on transfer channel.
+2024-11-18 14:58:43,347 - Server1 - CRITICAL - Error handling request channel: [Errno 9] Bad file descriptor
+2024-11-18 14:59:01,732 - Server1 - INFO - Logging started for Server1
+2024-11-18 14:59:01,732 - Server1 - INFO - Server Server1 started on 0.0.0.0:8001
+2024-11-18 14:59:01,734 - Server1 - INFO - Received acknowledgment from Server2 on request channel.
+2024-11-18 14:59:01,734 - Server1 - INFO - Received acknowledgment from Server2 on gossip channel.
+2024-11-18 14:59:01,734 - Server1 - INFO - Received acknowledgment from Server2 on transfer channel.
+2024-11-18 14:59:01,734 - Server1 - INFO - Connected to server Server2 at 127.0.0.1:8002
+2024-11-18 14:59:01,734 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'request', 'type': 'prompt', 'text': 'Hello on request channel', 'id': '95f37750-ee74-402f-8f63-b5e93a7e1e1c'} to Server2 on request channel.
+2024-11-18 14:59:01,734 - Server1 - INFO - Waiting for a reply for ID 95f37750-ee74-402f-8f63-b5e93a7e1e1c
+2024-11-18 14:59:01,735 - Server1 - INFO - Reply added for ID 95f37750-ee74-402f-8f63-b5e93a7e1e1c
+2024-11-18 14:59:01,735 - Server1 - INFO - Reply received: {"source": "Server2", "destination": "Server1", "channel": "request", "type": "reply", "text": "Hello on request channel", "id": "95f37750-ee74-402f-8f63-b5e93a7e1e1c"}
+2024-11-18 14:59:01,735 - Server1 - INFO - Received gossip message: {"source": "Server2", "destination": "Server1", "channel": "gossip", "type": "notification", "text": "Hello on gossip channel", "id": "9d57403c-ab61-4edd-adc2-86dc49935d11"}
+2024-11-18 14:59:01,735 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'transfer', 'type': 'notification', 'text': 'Hello on transfer channel', 'id': '4d85c7a8-b126-4f48-bb98-0a7ca011c513'} to Server2 on transfer channel.
+2024-11-18 14:59:01,735 - Server1 - ERROR - Server Server1 is down.
+2024-11-18 14:59:01,735 - Server1 - CRITICAL - Error handling request channel: [Errno 9] Bad file descriptor
+2024-11-18 14:59:43,461 - Server1 - INFO - Logging started for Server1
+2024-11-18 14:59:43,462 - Server1 - INFO - Server Server1 started on 0.0.0.0:8001
+2024-11-18 14:59:43,463 - Server1 - INFO - Received acknowledgment from Server2 on request channel.
+2024-11-18 14:59:43,463 - Server1 - INFO - Received acknowledgment from Server2 on gossip channel.
+2024-11-18 14:59:43,463 - Server1 - INFO - Received acknowledgment from Server2 on transfer channel.
+2024-11-18 14:59:43,463 - Server1 - INFO - Connected to server Server2 at 127.0.0.1:8002
+2024-11-18 14:59:43,464 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'request', 'type': 'prompt', 'text': 'Hello on request channel', 'id': 'b969ff4b-0c17-4979-95fe-3fee5a26aee6'} to Server2 on request channel.
+2024-11-18 14:59:43,464 - Server1 - INFO - Waiting for a reply for ID b969ff4b-0c17-4979-95fe-3fee5a26aee6
+2024-11-18 14:59:43,464 - Server1 - INFO - Reply added for ID b969ff4b-0c17-4979-95fe-3fee5a26aee6
+2024-11-18 14:59:43,464 - Server1 - INFO - Reply received: {"source": "Server2", "destination": "Server1", "channel": "request", "type": "reply", "text": "Hello on request channel", "id": "b969ff4b-0c17-4979-95fe-3fee5a26aee6"}
+2024-11-18 14:59:43,464 - Server1 - INFO - Received gossip message: {"source": "Server2", "destination": "Server1", "channel": "gossip", "type": "notification", "text": "Hello on gossip channel", "id": "c849cc66-95a5-4558-a8db-40e7514b8cae"}
+2024-11-18 14:59:43,464 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'transfer', 'type': 'notification', 'text': 'Hello on transfer channel', 'id': '749a3a6a-606f-432c-9687-ee87c618a104'} to Server2 on transfer channel.
+2024-11-18 14:59:43,464 - Server1 - ERROR - Server Server1 is down.
+2024-11-18 14:59:43,464 - Server1 - CRITICAL - Error handling request channel: [Errno 9] Bad file descriptor
+2024-11-18 14:59:43,464 - Server1 - CRITICAL - Error handling gossip channel: [Errno 9] Bad file descriptor
+2024-11-18 14:59:43,464 - Server1 - INFO - Server Server1 stopped.
+2024-11-18 14:59:43,464 - Server1 - CRITICAL - Error handling transfer channel: [Errno 9] Bad file descriptor
