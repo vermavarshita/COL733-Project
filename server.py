@@ -4,9 +4,10 @@ import uuid
 from typing import Dict, Any
 from message import JsonMessage
 from buffer import Buffer
+from abc import ABC, abstractmethod
 import logging
 
-class Server:
+class Server(ABC):
     def __init__(self, name: str, host: str = '0.0.0.0', port: int = 5000) -> None:
         self.name: str = name
         self.host: str = host
@@ -36,13 +37,10 @@ class Server:
         """Generates a random message ID."""
         return str(uuid.uuid4())
 
+    @abstractmethod
     def handle_request(self, message: Dict[str, Any]) -> None:
-        """Handles a request message."""
-        self.logger.info(f"Received request message: {message}")
-        if message.get("type") == "prompt":
-            reply = {"source": self.name, "destination": message.get("source"), "channel": "request", "type": "reply", "text": "Hello on request channel", "id": message.get("id"), "role": "server"}
-            self.send_message(reply)
-        
+        """Handles a transfer message."""
+        pass
 
     def handle_gossip(self, message: Dict[str, Any]) -> None:
         """Handles a gossip message."""
@@ -51,12 +49,10 @@ class Server:
             reply = {"source": self.name, "destination": message.get("source"), "channel": "request", "type": "reply", "text": "Hello on request channel", "id": message.get("id"), "role": "server"}
             self.send_message(reply)
 
+    @abstractmethod
     def handle_transfer(self, message: Dict[str, Any]) -> None:
         """Handles a transfer message."""
-        self.logger.info(f"Received transfer message: {message}")
-        if message.get("type") == "prompt":
-            reply = {"source": self.name, "destination": message.get("source"), "channel": "request", "type": "reply", "text": "Hello on request channel", "id": message.get("id"), "role": "server"}
-            self.send_message(reply)
+        pass
 
     def start(self) -> None:
         """Starts the server and listens for incoming connections."""
@@ -204,8 +200,10 @@ class Server:
             transfer_thread.start()
 
             self.logger.info(f"Connected to server {remote_server_name} at {host}:{port}")
+            return remote_server_name
         except Exception as e:
             self.logger.error(f"Failed to connect to server {host}:{port}: {e}")
+            return None
 
     def send_message(self, message: Dict[str,str]) -> None:
         """Sends a message through a specific channel."""

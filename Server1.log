@@ -1,25 +1,11 @@
-2024-11-18 17:27:24,092 - Server1 - INFO - Logging started for Server1
-2024-11-18 17:27:25,678 - Server1 - INFO - Logging started for Server1
-2024-11-18 17:27:26,755 - Server1 - INFO - Logging started for Server1
-2024-11-18 17:27:27,651 - Server1 - INFO - Logging started for Server1
-2024-11-18 17:27:30,537 - Server1 - INFO - Logging started for Server1
-2024-11-18 17:27:30,538 - Server1 - INFO - Server Server1 started on 127.0.0.1:8001
-2024-11-18 17:27:30,539 - Server1 - INFO - Received acknowledgment from Server2 on request channel.
-2024-11-18 17:27:30,539 - Server1 - INFO - Received acknowledgment from Server2 on gossip channel.
-2024-11-18 17:27:30,539 - Server1 - INFO - Received acknowledgment from Server2 on transfer channel.
-2024-11-18 17:27:30,539 - Server1 - INFO - Connected to server Server2 at 127.0.0.1:8002
-2024-11-18 17:27:30,540 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'request', 'type': 'prompt', 'text': 'Hello on request channel', 'id': '478dcff5-a345-42e2-8261-992e03134d05'} to Server2 on request channel.
-2024-11-18 17:27:30,540 - Server1 - INFO - Waiting for a reply for ID 478dcff5-a345-42e2-8261-992e03134d05
-2024-11-18 17:27:30,540 - Server1 - INFO - Reply added for ID 478dcff5-a345-42e2-8261-992e03134d05
-2024-11-18 17:27:30,540 - Server1 - INFO - Reply received: {"source": "Server2", "destination": "Server1", "channel": "request", "type": "reply", "text": "Hello on request channel", "id": "478dcff5-a345-42e2-8261-992e03134d05", "role": "server"}
-2024-11-18 17:27:30,540 - Server1 - INFO - Received gossip message: {"source": "Server2", "destination": "Server1", "channel": "gossip", "type": "notification", "text": "Hello on gossip channel", "id": "b815f796-36b4-4af3-8dd1-f607624ae4a7"}
-2024-11-18 17:27:30,540 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'transfer', 'type': 'notification', 'text': 'Hello on transfer channel', 'id': '51280c79-75fa-4352-8f51-a05d9ea7d3f6'} to Server2 on transfer channel.
-2024-11-18 17:27:30,541 - Server1 - INFO - Request channel established with Client
-2024-11-18 17:27:30,541 - Server1 - INFO - Received request message: {"source": "Client", "destination": "Server1", "channel": "request", "type": "prompt", "id": "8abb27e8-29a4-41c9-8445-315f7d64b70e", "text": "Hello on request channel from client"}
-2024-11-18 17:27:30,541 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Client', 'channel': 'request', 'type': 'reply', 'text': 'Hello on request channel', 'id': '8abb27e8-29a4-41c9-8445-315f7d64b70e', 'role': 'server'} to Client on request channel.
-2024-11-18 17:27:30,541 - Server1 - ERROR - Server Server1 is down.
-2024-11-18 17:27:30,541 - Server1 - CRITICAL - Error handling request channel: [Errno 9] Bad file descriptor
-2024-11-18 17:27:30,541 - Server1 - CRITICAL - Error handling request channel: [Errno 9] Bad file descriptor
-2024-11-18 17:27:30,541 - Server1 - INFO - Server Server1 stopped.
-2024-11-18 17:27:30,541 - Server1 - CRITICAL - Error handling gossip channel: [Errno 9] Bad file descriptor
-2024-11-18 17:27:30,541 - Server1 - CRITICAL - Error handling transfer channel: [Errno 9] Bad file descriptor
+2024-11-19 01:12:00,819 - Server1 - INFO - Logging started for Server1
+2024-11-19 01:12:00,819 - Server1 - INFO - Server Server1 started on 127.0.0.1:8001
+2024-11-19 01:21:36,728 - Server1 - INFO - Logging started for Server1
+2024-11-19 01:21:36,728 - Server1 - INFO - Server Server1 started on 127.0.0.1:8001
+2024-11-19 01:23:32,742 - Server1 - INFO - Logging started for Server1
+2024-11-19 01:23:32,742 - Server1 - INFO - Server Server1 started on 127.0.0.1:8001
+2024-11-19 01:23:32,753 - Server1 - INFO - Request channel established with Server2
+2024-11-19 01:23:32,753 - Server1 - INFO - Gossip channel established with Server2
+2024-11-19 01:23:32,754 - Server1 - INFO - Transfer channel established with Server2
+2024-11-19 01:23:32,756 - Server1 - INFO - Received transfer message: {"source": "Server2", "destination": "Server1", "channel": "transfer", "type": "prompt", "text": "seed_connect", "role": "server", "id": "870fa88d-3887-4f02-8670-80bda981fa9f"}
+2024-11-19 01:23:32,756 - Server1 - CRITICAL - Reply message must have an ID.

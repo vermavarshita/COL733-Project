@@ -47,7 +47,7 @@ class JsonMessage:
         length:- is unsigned is integer.
         message:- is utf-8 encoded
         """
-        return self.msg_len.to_bytes(8) + self.msg_bytes
+        return self.msg_len.to_bytes(8,'big') + self.msg_bytes
 
     def __str__(self) -> str:
         return json.dumps(self._msg_d)

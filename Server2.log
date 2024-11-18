@@ -1,11 +1,14 @@
-2024-11-18 17:27:30,538 - Server2 - INFO - Logging started for Server2
-2024-11-18 17:27:30,538 - Server2 - INFO - Server Server2 started on 127.0.0.1:8002
-2024-11-18 17:27:30,538 - Server2 - INFO - Request channel established with Server1
-2024-11-18 17:27:30,539 - Server2 - INFO - Gossip channel established with Server1
-2024-11-18 17:27:30,539 - Server2 - INFO - Transfer channel established with Server1
-2024-11-18 17:27:30,540 - Server2 - INFO - Received request message: {"source": "Server1", "destination": "Server2", "channel": "request", "type": "prompt", "text": "Hello on request channel", "id": "478dcff5-a345-42e2-8261-992e03134d05"}
-2024-11-18 17:27:30,540 - Server2 - INFO - Sent {'source': 'Server2', 'destination': 'Server1', 'channel': 'request', 'type': 'reply', 'text': 'Hello on request channel', 'id': '478dcff5-a345-42e2-8261-992e03134d05', 'role': 'server'} to Server1 on request channel.
-2024-11-18 17:27:30,540 - Server2 - INFO - Sent {'source': 'Server2', 'destination': 'Server1', 'channel': 'gossip', 'type': 'notification', 'text': 'Hello on gossip channel', 'id': 'b815f796-36b4-4af3-8dd1-f607624ae4a7'} to Server1 on gossip channel.
-2024-11-18 17:27:30,540 - Server2 - INFO - Received transfer message: {"source": "Server1", "destination": "Server2", "channel": "transfer", "type": "notification", "text": "Hello on transfer channel", "id": "51280c79-75fa-4352-8f51-a05d9ea7d3f6"}
-2024-11-18 17:27:30,542 - Server2 - ERROR - Server Server2 is down.
-2024-11-18 17:27:30,542 - Server2 - INFO - Server Server2 stopped.
+2024-11-19 01:12:00,820 - Server2 - INFO - Logging started for Server2
+2024-11-19 01:12:00,821 - Server2 - ERROR - Failed to connect to server 127.0.0.1:8001: 'Dynamo' object has no attribute 'network_id'
+2024-11-19 01:12:00,821 - Server2 - CRITICAL - No connection to None on transfer channel.
+2024-11-19 01:21:36,729 - Server2 - INFO - Logging started for Server2
+2024-11-19 01:21:36,730 - Server2 - ERROR - Failed to connect to server 127.0.0.1:8001: to_bytes() missing required argument 'byteorder' (pos 2)
+2024-11-19 01:21:36,731 - Server2 - CRITICAL - No connection to None on transfer channel.
+2024-11-19 01:23:32,743 - Server2 - INFO - Logging started for Server2
+2024-11-19 01:23:32,753 - Server2 - INFO - Received acknowledgment from Server1 on request channel.
+2024-11-19 01:23:32,754 - Server2 - INFO - Received acknowledgment from Server1 on gossip channel.
+2024-11-19 01:23:32,754 - Server2 - INFO - Received acknowledgment from Server1 on transfer channel.
+2024-11-19 01:23:32,755 - Server2 - INFO - Connected to server Server1 at 127.0.0.1:8001
+2024-11-19 01:23:32,756 - Server2 - INFO - Sent {'source': 'Server2', 'destination': 'Server1', 'channel': 'transfer', 'type': 'prompt', 'text': 'seed_connect', 'role': 'server', 'id': '870fa88d-3887-4f02-8670-80bda981fa9f'} to Server1 on transfer channel.
+2024-11-19 01:23:32,756 - Server2 - INFO - Waiting for a reply for ID 870fa88d-3887-4f02-8670-80bda981fa9f
+2024-11-19 01:23:37,757 - Server2 - INFO - Waiting for ID 870fa88d-3887-4f02-8670-80bda981fa9f timed out
