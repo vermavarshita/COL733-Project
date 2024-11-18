@@ -1,0 +1,10 @@
+2024-11-18 17:27:30,540 - Client - INFO - Logging started for Client
+2024-11-18 17:27:30,541 - Client - INFO - Successfully established request channel with Server1
+2024-11-18 17:27:30,541 - Client - INFO - New thread started to receive reply.
+2024-11-18 17:27:30,541 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '8abb27e8-29a4-41c9-8445-315f7d64b70e', 'text': 'Hello on request channel from client'}
+2024-11-18 17:27:30,541 - Client - INFO - Waiting for a reply for ID 8abb27e8-29a4-41c9-8445-315f7d64b70e
+2024-11-18 17:27:30,541 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Hello on request channel", "id": "8abb27e8-29a4-41c9-8445-315f7d64b70e", "role": "server"}
+2024-11-18 17:27:30,541 - Client - INFO - Reply added for ID 8abb27e8-29a4-41c9-8445-315f7d64b70e
+2024-11-18 17:27:30,541 - Client - INFO - Remaining incoming messages: 0
+2024-11-18 17:27:30,542 - Client - INFO - Connection closed.
+2024-11-18 17:27:30,542 - Client - INFO - Client stopped.

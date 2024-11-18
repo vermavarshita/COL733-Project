@@ -40,7 +40,7 @@ class Server:
         """Handles a request message."""
         self.logger.info(f"Received request message: {message}")
         if message.get("type") == "prompt":
-            reply = {"source": self.name, "destination": message.get("source"), "channel": "request", "type": "reply", "text": "Hello on request channel", "id": message.get("id")}
+            reply = {"source": self.name, "destination": message.get("source"), "channel": "request", "type": "reply", "text": "Hello on request channel", "id": message.get("id"), "role": "server"}
             self.send_message(reply)
         
 
@@ -48,14 +48,14 @@ class Server:
         """Handles a gossip message."""
         self.logger.info(f"Received gossip message: {message}")
         if message.get("type") == "prompt":
-            reply = {"source": self.name, "destination": message.get("source"), "channel": "request", "type": "reply", "text": "Hello on request channel", "id": message.get("id")}
+            reply = {"source": self.name, "destination": message.get("source"), "channel": "request", "type": "reply", "text": "Hello on request channel", "id": message.get("id"), "role": "server"}
             self.send_message(reply)
 
     def handle_transfer(self, message: Dict[str, Any]) -> None:
         """Handles a transfer message."""
         self.logger.info(f"Received transfer message: {message}")
         if message.get("type") == "prompt":
-            reply = {"source": self.name, "destination": message.get("source"), "channel": "request", "type": "reply", "text": "Hello on request channel", "id": message.get("id")}
+            reply = {"source": self.name, "destination": message.get("source"), "channel": "request", "type": "reply", "text": "Hello on request channel", "id": message.get("id"), "role": "server"}
             self.send_message(reply)
 
     def start(self) -> None:
@@ -85,9 +85,14 @@ class Server:
                 message = JsonMessage.deserialize(data)
                 channel_type = message.get("channel")
                 server_name = message.get("source")
+                role = message.get("role")
 
-                ack_message = JsonMessage({"source": self.name, "channel": channel_type, "destination": server_name})
-
+                ack_message = JsonMessage({"source": self.name, "channel": channel_type, "destination": server_name, "type": "notification", "role": "server"})
+                if role == "client":
+                    assert channel_type == "request", "Client must connect on request channel."
+                else:
+                    network_id = message.get("network_id")
+                    assert network_id == self.network_id, "Network ID must match."
                 if channel_type == "request":
                     self.request_channels[server_name] = client_socket
                     client_socket.sendall(ack_message.serialize())
@@ -167,6 +172,9 @@ class Server:
                 init_message = JsonMessage({
                     "channel": channel_type,
                     "source": self.name,
+                    "type": "notification",
+                    "role": "server",
+                    "network_id": self.network_id
                 })
                 client_socket.sendall(init_message.serialize())
 
