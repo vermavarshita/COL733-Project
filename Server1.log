@@ -1,11 +1,35 @@
-2024-11-19 01:12:00,819 - Server1 - INFO - Logging started for Server1
-2024-11-19 01:12:00,819 - Server1 - INFO - Server Server1 started on 127.0.0.1:8001
-2024-11-19 01:21:36,728 - Server1 - INFO - Logging started for Server1
-2024-11-19 01:21:36,728 - Server1 - INFO - Server Server1 started on 127.0.0.1:8001
-2024-11-19 01:23:32,742 - Server1 - INFO - Logging started for Server1
-2024-11-19 01:23:32,742 - Server1 - INFO - Server Server1 started on 127.0.0.1:8001
-2024-11-19 01:23:32,753 - Server1 - INFO - Request channel established with Server2
-2024-11-19 01:23:32,753 - Server1 - INFO - Gossip channel established with Server2
-2024-11-19 01:23:32,754 - Server1 - INFO - Transfer channel established with Server2
-2024-11-19 01:23:32,756 - Server1 - INFO - Received transfer message: {"source": "Server2", "destination": "Server1", "channel": "transfer", "type": "prompt", "text": "seed_connect", "role": "server", "id": "870fa88d-3887-4f02-8670-80bda981fa9f"}
-2024-11-19 01:23:32,756 - Server1 - CRITICAL - Reply message must have an ID.
+2024-11-19 01:45:57,338 - Server1 - INFO - Logging started for Server1
+2024-11-19 01:45:57,338 - Server1 - INFO - Server Server1 started on 127.0.0.1:8001
+2024-11-19 01:45:57,340 - Server1 - INFO - Request channel established with Server2
+2024-11-19 01:45:57,341 - Server1 - INFO - Gossip channel established with Server2
+2024-11-19 01:45:57,342 - Server1 - INFO - Transfer channel established with Server2
+2024-11-19 01:45:57,343 - Server1 - INFO - Received transfer message: {"source": "Server2", "destination": "Server1", "channel": "transfer", "type": "prompt", "text": "seed_connect", "role": "server", "id": "aa5392fe-5c86-42a2-b75f-61fd0a778e16"}
+2024-11-19 01:45:57,344 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'transfer', 'type': 'reply', 'text': 'seed_connect', 'data': {'ring': {8001: [(0, 28948022309329048855892746252171976963317496166410141009864396001978282409983), (28948022309329048855892746252171976963317496166410141009864396001978282409984, 57896044618658097711785492504343953926634992332820282019728792003956564819967), (57896044618658097711785492504343953926634992332820282019728792003956564819968, 86844066927987146567678238756515930889952488499230423029593188005934847229951), (86844066927987146567678238756515930889952488499230423029593188005934847229952, 115792089237316195423570985008687907853269984665640564039457584007913129639935)]}, 'vnodes': 4, 'network': {}}, 'id': 'aa5392fe-5c86-42a2-b75f-61fd0a778e16'} to Server2 on transfer channel.
+2024-11-19 01:47:36,889 - Server1 - INFO - Logging started for Server1
+2024-11-19 01:47:36,890 - Server1 - INFO - Server Server1 started on 127.0.0.1:8001
+2024-11-19 01:47:36,891 - Server1 - INFO - Request channel established with Server2
+2024-11-19 01:47:36,892 - Server1 - INFO - Gossip channel established with Server2
+2024-11-19 01:47:36,893 - Server1 - INFO - Transfer channel established with Server2
+2024-11-19 01:47:36,894 - Server1 - INFO - Received transfer message: {"source": "Server2", "destination": "Server1", "channel": "transfer", "type": "prompt", "text": "seed_connect", "role": "server", "id": "a14f6680-180d-4416-b084-2828a1a6bf60"}
+2024-11-19 01:47:36,894 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'transfer', 'type': 'reply', 'text': 'seed_connect', 'data': {'ring': {8001: [(0, 28948022309329048855892746252171976963317496166410141009864396001978282409983), (28948022309329048855892746252171976963317496166410141009864396001978282409984, 57896044618658097711785492504343953926634992332820282019728792003956564819967), (57896044618658097711785492504343953926634992332820282019728792003956564819968, 86844066927987146567678238756515930889952488499230423029593188005934847229951), (86844066927987146567678238756515930889952488499230423029593188005934847229952, 115792089237316195423570985008687907853269984665640564039457584007913129639935)]}, 'vnodes': 4, 'network': {8001: ('Server1', '127.0.0.1')}}, 'id': 'a14f6680-180d-4416-b084-2828a1a6bf60'} to Server2 on transfer channel.
+2024-11-19 01:48:52,175 - Server1 - INFO - Logging started for Server1
+2024-11-19 01:48:52,175 - Server1 - INFO - Server Server1 started on 127.0.0.1:8001
+2024-11-19 01:48:52,177 - Server1 - INFO - Request channel established with Server2
+2024-11-19 01:48:52,177 - Server1 - INFO - Gossip channel established with Server2
+2024-11-19 01:48:52,178 - Server1 - INFO - Transfer channel established with Server2
+2024-11-19 01:48:52,179 - Server1 - INFO - Received transfer message: {"source": "Server2", "destination": "Server1", "channel": "transfer", "type": "prompt", "text": "seed_connect", "role": "server", "id": "f630167d-e8ef-4ed7-b745-da0f9fd604a9"}
+2024-11-19 01:48:52,179 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'transfer', 'type': 'reply', 'text': 'seed_connect', 'data': {'ring': {8001: [(0, 28948022309329048855892746252171976963317496166410141009864396001978282409983), (28948022309329048855892746252171976963317496166410141009864396001978282409984, 57896044618658097711785492504343953926634992332820282019728792003956564819967), (57896044618658097711785492504343953926634992332820282019728792003956564819968, 86844066927987146567678238756515930889952488499230423029593188005934847229951), (86844066927987146567678238756515930889952488499230423029593188005934847229952, 115792089237316195423570985008687907853269984665640564039457584007913129639935)]}, 'vnodes': 4, 'network': {8001: ('Server1', '127.0.0.1')}}, 'id': 'f630167d-e8ef-4ed7-b745-da0f9fd604a9'} to Server2 on transfer channel.
+2024-11-19 01:54:25,455 - Server1 - INFO - Logging started for Server1
+2024-11-19 01:54:25,455 - Server1 - INFO - Server Server1 started on 127.0.0.1:8001
+2024-11-19 01:54:25,466 - Server1 - INFO - Request channel established with Server2
+2024-11-19 01:54:25,467 - Server1 - INFO - Gossip channel established with Server2
+2024-11-19 01:54:25,467 - Server1 - INFO - Transfer channel established with Server2
+2024-11-19 01:54:25,468 - Server1 - INFO - Received transfer message: {"source": "Server2", "destination": "Server1", "channel": "transfer", "type": "prompt", "text": "seed_connect", "role": "server", "id": "9d3dd708-14c8-42d8-a697-258b37123a46"}
+2024-11-19 01:54:25,468 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'transfer', 'type': 'reply', 'text': 'seed_connect', 'role': 'server', 'id': '9d3dd708-14c8-42d8-a697-258b37123a46', 'data': {'ring': {8001: [(0, 28948022309329048855892746252171976963317496166410141009864396001978282409983), (28948022309329048855892746252171976963317496166410141009864396001978282409984, 57896044618658097711785492504343953926634992332820282019728792003956564819967), (57896044618658097711785492504343953926634992332820282019728792003956564819968, 86844066927987146567678238756515930889952488499230423029593188005934847229951), (86844066927987146567678238756515930889952488499230423029593188005934847229952, 115792089237316195423570985008687907853269984665640564039457584007913129639935)]}, 'vnodes': 4, 'network': {8001: ('Server1', '127.0.0.1')}}} to Server2 on transfer channel.
+2024-11-19 01:56:52,917 - Server1 - INFO - Logging started for Server1
+2024-11-19 01:56:52,918 - Server1 - INFO - Server Server1 started on 127.0.0.1:8001
+2024-11-19 01:56:52,919 - Server1 - INFO - Request channel established with Server2
+2024-11-19 01:56:52,920 - Server1 - INFO - Gossip channel established with Server2
+2024-11-19 01:56:52,921 - Server1 - INFO - Transfer channel established with Server2
+2024-11-19 01:56:52,922 - Server1 - INFO - Received transfer message: {"source": "Server2", "destination": "Server1", "channel": "transfer", "type": "prompt", "text": "seed_connect", "role": "server", "id": "8c7c2b98-c830-4d6e-98b2-9c32a761a139"}
+2024-11-19 01:56:52,922 - Server1 - INFO - Sent {'source': 'Server1', 'destination': 'Server2', 'channel': 'transfer', 'type': 'reply', 'text': 'seed_connect', 'role': 'server', 'id': '8c7c2b98-c830-4d6e-98b2-9c32a761a139', 'data': {'ring': {8001: [(0, 3), (4, 7), (8, 11), (12, 15)]}, 'vnodes': 4, 'network': {8001: ('Server1', '127.0.0.1')}}} to Server2 on transfer channel.

@@ -1,14 +1,40 @@
-2024-11-19 01:12:00,820 - Server2 - INFO - Logging started for Server2
-2024-11-19 01:12:00,821 - Server2 - ERROR - Failed to connect to server 127.0.0.1:8001: 'Dynamo' object has no attribute 'network_id'
-2024-11-19 01:12:00,821 - Server2 - CRITICAL - No connection to None on transfer channel.
-2024-11-19 01:21:36,729 - Server2 - INFO - Logging started for Server2
-2024-11-19 01:21:36,730 - Server2 - ERROR - Failed to connect to server 127.0.0.1:8001: to_bytes() missing required argument 'byteorder' (pos 2)
-2024-11-19 01:21:36,731 - Server2 - CRITICAL - No connection to None on transfer channel.
-2024-11-19 01:23:32,743 - Server2 - INFO - Logging started for Server2
-2024-11-19 01:23:32,753 - Server2 - INFO - Received acknowledgment from Server1 on request channel.
-2024-11-19 01:23:32,754 - Server2 - INFO - Received acknowledgment from Server1 on gossip channel.
-2024-11-19 01:23:32,754 - Server2 - INFO - Received acknowledgment from Server1 on transfer channel.
-2024-11-19 01:23:32,755 - Server2 - INFO - Connected to server Server1 at 127.0.0.1:8001
-2024-11-19 01:23:32,756 - Server2 - INFO - Sent {'source': 'Server2', 'destination': 'Server1', 'channel': 'transfer', 'type': 'prompt', 'text': 'seed_connect', 'role': 'server', 'id': '870fa88d-3887-4f02-8670-80bda981fa9f'} to Server1 on transfer channel.
-2024-11-19 01:23:32,756 - Server2 - INFO - Waiting for a reply for ID 870fa88d-3887-4f02-8670-80bda981fa9f
-2024-11-19 01:23:37,757 - Server2 - INFO - Waiting for ID 870fa88d-3887-4f02-8670-80bda981fa9f timed out
+2024-11-19 01:45:57,340 - Server2 - INFO - Logging started for Server2
+2024-11-19 01:45:57,341 - Server2 - INFO - Received acknowledgment from Server1 on request channel.
+2024-11-19 01:45:57,341 - Server2 - INFO - Received acknowledgment from Server1 on gossip channel.
+2024-11-19 01:45:57,342 - Server2 - INFO - Received acknowledgment from Server1 on transfer channel.
+2024-11-19 01:45:57,343 - Server2 - INFO - Connected to server Server1 at 127.0.0.1:8001
+2024-11-19 01:45:57,343 - Server2 - INFO - Sent {'source': 'Server2', 'destination': 'Server1', 'channel': 'transfer', 'type': 'prompt', 'text': 'seed_connect', 'role': 'server', 'id': 'aa5392fe-5c86-42a2-b75f-61fd0a778e16'} to Server1 on transfer channel.
+2024-11-19 01:45:57,343 - Server2 - INFO - Waiting for a reply for ID aa5392fe-5c86-42a2-b75f-61fd0a778e16
+2024-11-19 01:46:02,344 - Server2 - INFO - Waiting for ID aa5392fe-5c86-42a2-b75f-61fd0a778e16 timed out
+2024-11-19 01:47:36,891 - Server2 - INFO - Logging started for Server2
+2024-11-19 01:47:36,892 - Server2 - INFO - Received acknowledgment from Server1 on request channel.
+2024-11-19 01:47:36,892 - Server2 - INFO - Received acknowledgment from Server1 on gossip channel.
+2024-11-19 01:47:36,893 - Server2 - INFO - Received acknowledgment from Server1 on transfer channel.
+2024-11-19 01:47:36,894 - Server2 - INFO - Connected to server Server1 at 127.0.0.1:8001
+2024-11-19 01:47:36,894 - Server2 - INFO - Sent {'source': 'Server2', 'destination': 'Server1', 'channel': 'transfer', 'type': 'prompt', 'text': 'seed_connect', 'role': 'server', 'id': 'a14f6680-180d-4416-b084-2828a1a6bf60'} to Server1 on transfer channel.
+2024-11-19 01:47:36,894 - Server2 - INFO - Waiting for a reply for ID a14f6680-180d-4416-b084-2828a1a6bf60
+2024-11-19 01:47:41,895 - Server2 - INFO - Waiting for ID a14f6680-180d-4416-b084-2828a1a6bf60 timed out
+2024-11-19 01:48:52,176 - Server2 - INFO - Logging started for Server2
+2024-11-19 01:48:52,177 - Server2 - INFO - Received acknowledgment from Server1 on request channel.
+2024-11-19 01:48:52,177 - Server2 - INFO - Received acknowledgment from Server1 on gossip channel.
+2024-11-19 01:48:52,178 - Server2 - INFO - Received acknowledgment from Server1 on transfer channel.
+2024-11-19 01:48:52,179 - Server2 - INFO - Connected to server Server1 at 127.0.0.1:8001
+2024-11-19 01:48:52,179 - Server2 - INFO - Sent {'source': 'Server2', 'destination': 'Server1', 'channel': 'transfer', 'type': 'prompt', 'text': 'seed_connect', 'role': 'server', 'id': 'f630167d-e8ef-4ed7-b745-da0f9fd604a9'} to Server1 on transfer channel.
+2024-11-19 01:48:52,179 - Server2 - INFO - Waiting for a reply for ID f630167d-e8ef-4ed7-b745-da0f9fd604a9
+2024-11-19 01:49:12,180 - Server2 - INFO - Waiting for ID f630167d-e8ef-4ed7-b745-da0f9fd604a9 timed out
+2024-11-19 01:54:25,456 - Server2 - INFO - Logging started for Server2
+2024-11-19 01:54:25,466 - Server2 - INFO - Received acknowledgment from Server1 on request channel.
+2024-11-19 01:54:25,467 - Server2 - INFO - Received acknowledgment from Server1 on gossip channel.
+2024-11-19 01:54:25,467 - Server2 - INFO - Received acknowledgment from Server1 on transfer channel.
+2024-11-19 01:54:25,468 - Server2 - INFO - Connected to server Server1 at 127.0.0.1:8001
+2024-11-19 01:54:25,468 - Server2 - INFO - Sent {'source': 'Server2', 'destination': 'Server1', 'channel': 'transfer', 'type': 'prompt', 'text': 'seed_connect', 'role': 'server', 'id': '9d3dd708-14c8-42d8-a697-258b37123a46'} to Server1 on transfer channel.
+2024-11-19 01:54:25,468 - Server2 - INFO - Waiting for a reply for ID 9d3dd708-14c8-42d8-a697-258b37123a46
+2024-11-19 01:54:45,468 - Server2 - INFO - Waiting for ID 9d3dd708-14c8-42d8-a697-258b37123a46 timed out
+2024-11-19 01:56:52,919 - Server2 - INFO - Logging started for Server2
+2024-11-19 01:56:52,919 - Server2 - INFO - Received acknowledgment from Server1 on request channel.
+2024-11-19 01:56:52,920 - Server2 - INFO - Received acknowledgment from Server1 on gossip channel.
+2024-11-19 01:56:52,921 - Server2 - INFO - Received acknowledgment from Server1 on transfer channel.
+2024-11-19 01:56:52,921 - Server2 - INFO - Connected to server Server1 at 127.0.0.1:8001
+2024-11-19 01:56:52,921 - Server2 - INFO - Sent {'source': 'Server2', 'destination': 'Server1', 'channel': 'transfer', 'type': 'prompt', 'text': 'seed_connect', 'role': 'server', 'id': '8c7c2b98-c830-4d6e-98b2-9c32a761a139'} to Server1 on transfer channel.
+2024-11-19 01:56:52,922 - Server2 - INFO - Waiting for a reply for ID 8c7c2b98-c830-4d6e-98b2-9c32a761a139
+2024-11-19 01:57:12,923 - Server2 - INFO - Waiting for ID 8c7c2b98-c830-4d6e-98b2-9c32a761a139 timed out

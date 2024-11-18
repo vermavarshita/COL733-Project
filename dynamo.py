@@ -12,8 +12,8 @@ class HashRing:
     def add_node(self, host, port, server: str, vnodes:int = 4):
         if server in self.ring:
             return
+        self.network[server] = (host, port)
         if self.ring:
-            self.network[server] = (host, port) 
             self.ring[server] = []
             segments = self.get_all_segments()
             segments.sort(key=lambda x: x[0], reverse=True)
@@ -31,7 +31,7 @@ class HashRing:
             # first node is added with vnodes and hash range of 0 to 2^256, divide this range into vnode parts
             self.ring[server] = []
             for i in range(vnodes):
-                self.ring[server].append((i*(2**256)//vnodes, ((i+1)*(2**256)//vnodes)-1))
+                self.ring[server].append((i*(2**4)//vnodes, ((i+1)*(2**4)//vnodes)-1))
             
     def get_all_segments(self):
         segments = []
@@ -74,6 +74,23 @@ class HashRing:
                     return node
         return None
     
+    def to_dict(self):
+        """Converts the HashRing into a JSON-serializable dictionary."""
+        return {
+            "ring": self.ring,
+            "vnodes": self.vnodes,
+            "network": self.network,
+        }
+
+    @classmethod
+    def from_dict(cls, data):
+        """Reconstructs a HashRing object from a dictionary."""
+        obj = cls(server=None, host=None, port=None)  # Create an empty instance
+        obj.ring = data["ring"]
+        obj.vnodes = data["vnodes"]
+        obj.network = data["network"]
+        return obj
+    
 
 class Dynamo(Server):
     def __init__(self, name: str, host: str = '0.0.0.0', port: int = 5000, network_id = None, seed : dict = None):
@@ -82,11 +99,11 @@ class Dynamo(Server):
         self.network_id = network_id
 
         if seed:
-            hring = self.connect_seed(seed)
+            hring = HashRing.from_dict(self.connect_seed(seed))
             self.ring = HashRing(self.name, self.host, self.port, hring.ring, hring.network, hring.vnodes)
             self.connect_all(hring.network)
             for key in self.ring.ring[self.name]:
-                reply = self.send_message({"source": self.name, "destination": hring.get_node(key[0]), "channel": "transfer", "type": "prompt", "text": "get_data", "data": (key,self.ring)})
+                reply = self.send_message({"source": self.name, "destination": hring.get_node(key[0]), "channel": "transfer", "type": "prompt", "text": "get_data", "data": (key,self.ring.to_dict())})
                 self.data.update(reply["data"])
 
         else:
@@ -106,11 +123,11 @@ class Dynamo(Server):
         self.logger.info(f"Received transfer message: {message}")
         if message.get("type") == "prompt":
             if message["text"] == "seed_connect":
-                self.send_message({"source": self.name, "destination": message["source"], "channel": "transfer", "type": "reply", "text": "seed_connect", "data": self.ring})
+                self.send_message({"source": self.name, "destination": message["source"], "channel": "transfer", "type": "reply", "text": "seed_connect", "role": "server", "id": message.get("id"), "data": self.ring.to_dict()})
             elif message["text"] == "get_data":
                 data = self.send_data(message["data"][0])
-                self.ring = message["data"][1]
-                self.send_message({"source": self.name, "destination": message["source"], "channel": "transfer", "type": "reply", "text": "get_data", "data": data})
+                self.ring = HashRing.from_dict(message["data"][1])
+                self.send_message({"source": self.name, "destination": message["source"], "channel": "transfer", "type": "reply", "text": "get_data", "role": "server", "id": message.get("id"), "data": data})
         pass
 
     def handle_request(self, message: Dict[str, Any]) -> None:

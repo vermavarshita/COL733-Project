@@ -244,7 +244,8 @@ class Server(ABC):
             self.logger.critical(f"Failed to send message to {server_name} on {channel} channel: {e}")
             
         if type == "prompt":
-            reply=self.buffer.wait_on(message["id"], timeout=5)
+            reply=self.buffer.wait_on(message["id"], timeout=20)
+
             if reply:
                 self.logger.info(f"Reply received: {reply}")
             return reply
