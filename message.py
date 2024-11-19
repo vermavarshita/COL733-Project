@@ -23,6 +23,9 @@ class JsonMessage:
         
         # Ensure the message contains the expected number of bytes
         if len(msg[8:]) < msg_len:
+            print(msg)
+            print(msg[:8])
+            print(int.from_bytes(msg[:8], 'big'))
             raise ValueError(f"Message length mismatch: expected {msg_len} bytes, got {len(msg[8:])} bytes.")
         
         # Extract and decode the JSON message

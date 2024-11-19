@@ -8,3 +8,370 @@
 2024-11-18 17:27:30,541 - Client - INFO - Remaining incoming messages: 0
 2024-11-18 17:27:30,542 - Client - INFO - Connection closed.
 2024-11-18 17:27:30,542 - Client - INFO - Client stopped.
+2024-11-19 05:44:17,436 - Client - INFO - Logging started for Client
+2024-11-19 05:44:17,436 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 05:45:44,767 - Client - INFO - Logging started for Client
+2024-11-19 05:45:44,768 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 05:45:44,768 - Client - INFO - New thread started to receive reply.
+2024-11-19 05:45:44,769 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '46a479f8-fd69-4be7-9503-1fa33740ff95', 'text': 'put', 'data': 'Hello from client'}
+2024-11-19 05:45:44,770 - Client - INFO - Waiting for a reply for ID 46a479f8-fd69-4be7-9503-1fa33740ff95
+2024-11-19 05:45:44,770 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "46a479f8-fd69-4be7-9503-1fa33740ff95", "role": "server"}
+2024-11-19 05:45:44,770 - Client - INFO - Reply added for ID 46a479f8-fd69-4be7-9503-1fa33740ff95
+2024-11-19 05:45:44,770 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 05:45:44,786 - Client - INFO - New thread started to receive reply.
+2024-11-19 05:45:44,786 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': 'f6ee81df-0e38-42b8-9d8b-4cedb0cbdb86', 'text': 'Hello on request channel from client'}
+2024-11-19 05:45:44,787 - Client - INFO - Waiting for a reply for ID f6ee81df-0e38-42b8-9d8b-4cedb0cbdb86
+2024-11-19 05:45:45,787 - Client - INFO - Waiting for ID f6ee81df-0e38-42b8-9d8b-4cedb0cbdb86 timed out
+2024-11-19 05:45:45,788 - Client - INFO - Connection closed.
+2024-11-19 05:45:45,789 - Client - INFO - Client stopped.
+2024-11-19 05:47:16,507 - Client - INFO - Logging started for Client
+2024-11-19 05:47:16,508 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 05:47:16,508 - Client - INFO - New thread started to receive reply.
+2024-11-19 05:47:16,509 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': 'a0208691-4246-414b-a52f-dfac7b94fb9c', 'text': 'put', 'data': 'Hello from client'}
+2024-11-19 05:47:16,510 - Client - INFO - Waiting for a reply for ID a0208691-4246-414b-a52f-dfac7b94fb9c
+2024-11-19 05:47:16,510 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "a0208691-4246-414b-a52f-dfac7b94fb9c", "role": "server"}
+2024-11-19 05:47:16,510 - Client - INFO - Reply added for ID a0208691-4246-414b-a52f-dfac7b94fb9c
+2024-11-19 05:47:16,510 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 05:47:16,521 - Client - INFO - Connection closed.
+2024-11-19 05:47:16,522 - Client - INFO - Client stopped.
+2024-11-19 05:48:28,092 - Client - INFO - Logging started for Client
+2024-11-19 05:48:28,093 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 05:48:28,094 - Client - INFO - New thread started to receive reply.
+2024-11-19 05:48:28,094 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '84cbc4c8-1402-4ee8-bf49-e80f4886ffc3', 'text': 'put', 'data': 'Hello from client'}
+2024-11-19 05:48:28,095 - Client - INFO - Waiting for a reply for ID 84cbc4c8-1402-4ee8-bf49-e80f4886ffc3
+2024-11-19 05:48:28,095 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "84cbc4c8-1402-4ee8-bf49-e80f4886ffc3", "role": "server"}
+2024-11-19 05:48:28,095 - Client - INFO - Reply added for ID 84cbc4c8-1402-4ee8-bf49-e80f4886ffc3
+2024-11-19 05:48:28,095 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 05:48:28,107 - Client - INFO - Connection closed.
+2024-11-19 05:48:28,107 - Client - INFO - Client stopped.
+2024-11-19 05:51:58,321 - Client - INFO - Logging started for Client
+2024-11-19 05:51:58,321 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 05:51:58,322 - Client - INFO - New thread started to receive reply.
+2024-11-19 05:51:58,322 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '14822a0f-3b50-422f-9b17-1623d4e897d6', 'text': 'put', 'data': 'Hello from client'}
+2024-11-19 05:51:58,323 - Client - INFO - Waiting for a reply for ID 14822a0f-3b50-422f-9b17-1623d4e897d6
+2024-11-19 05:51:58,323 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "14822a0f-3b50-422f-9b17-1623d4e897d6", "role": "server"}
+2024-11-19 05:51:58,323 - Client - INFO - Reply added for ID 14822a0f-3b50-422f-9b17-1623d4e897d6
+2024-11-19 05:51:58,323 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 05:58:57,777 - Client - INFO - Logging started for Client
+2024-11-19 05:58:57,778 - Client - ERROR - No acknowledgment received from server.
+2024-11-19 05:58:57,778 - Client - ERROR - Failed to send prompt: 'Client' object has no attribute 'server'
+2024-11-19 06:01:25,840 - Client - INFO - Logging started for Client
+2024-11-19 06:01:25,841 - Client - ERROR - No acknowledgment received from server.
+2024-11-19 06:01:25,841 - Client - ERROR - Failed to send prompt: 'Client' object has no attribute 'server'
+2024-11-19 06:07:16,329 - Client - INFO - Logging started for Client
+2024-11-19 06:07:16,330 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:07:16,331 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:07:16,331 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': 'e4e81f18-c8ae-46ae-8572-d27c6e70596d', 'text': 'put', 'data': 'Hello from client'}
+2024-11-19 06:07:16,331 - Client - INFO - Waiting for a reply for ID e4e81f18-c8ae-46ae-8572-d27c6e70596d
+2024-11-19 06:07:16,331 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "e4e81f18-c8ae-46ae-8572-d27c6e70596d", "role": "server"}
+2024-11-19 06:07:16,332 - Client - INFO - Reply added for ID e4e81f18-c8ae-46ae-8572-d27c6e70596d
+2024-11-19 06:07:16,332 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:17:25,128 - Client - INFO - Logging started for Client
+2024-11-19 06:17:25,129 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:17:25,129 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:17:25,129 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': 'beed8d74-df8c-47e8-bd18-6d02d2883984', 'text': 'put', 'data': 'H'}
+2024-11-19 06:17:25,130 - Client - INFO - Waiting for a reply for ID beed8d74-df8c-47e8-bd18-6d02d2883984
+2024-11-19 06:17:25,130 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "beed8d74-df8c-47e8-bd18-6d02d2883984", "role": "server"}
+2024-11-19 06:17:25,130 - Client - INFO - Reply added for ID beed8d74-df8c-47e8-bd18-6d02d2883984
+2024-11-19 06:17:25,131 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:19:06,924 - Client - INFO - Logging started for Client
+2024-11-19 06:19:06,925 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:19:06,925 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:19:06,926 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': 'd3b1b38a-29dc-4225-8c5e-4b76010eaef3', 'text': 'put', 'data': 'H'}
+2024-11-19 06:19:06,926 - Client - INFO - Waiting for a reply for ID d3b1b38a-29dc-4225-8c5e-4b76010eaef3
+2024-11-19 06:19:06,926 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "d3b1b38a-29dc-4225-8c5e-4b76010eaef3", "role": "server"}
+2024-11-19 06:19:06,927 - Client - INFO - Reply added for ID d3b1b38a-29dc-4225-8c5e-4b76010eaef3
+2024-11-19 06:19:06,927 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:20:32,295 - Client - INFO - Logging started for Client
+2024-11-19 06:20:32,296 - Client - ERROR - No acknowledgment received from server.
+2024-11-19 06:20:32,296 - Client - ERROR - Failed to send prompt: 'Client' object has no attribute 'server'
+2024-11-19 06:21:49,784 - Client - INFO - Logging started for Client
+2024-11-19 06:21:49,785 - Client - ERROR - No acknowledgment received from server.
+2024-11-19 06:21:49,786 - Client - ERROR - Failed to send prompt: 'Client' object has no attribute 'server'
+2024-11-19 06:23:16,607 - Client - INFO - Logging started for Client
+2024-11-19 06:23:16,608 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:23:16,608 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:23:16,608 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': 'a2a6973f-68b5-4b40-bc7b-4aca8723e12e', 'text': 'put', 'data': 'H'}
+2024-11-19 06:23:16,609 - Client - INFO - Waiting for a reply for ID a2a6973f-68b5-4b40-bc7b-4aca8723e12e
+2024-11-19 06:23:16,609 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "a2a6973f-68b5-4b40-bc7b-4aca8723e12e", "role": "server"}
+2024-11-19 06:23:16,609 - Client - INFO - Reply added for ID a2a6973f-68b5-4b40-bc7b-4aca8723e12e
+2024-11-19 06:23:16,609 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:23:50,825 - Client - INFO - Logging started for Client
+2024-11-19 06:23:50,826 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:23:50,826 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:23:50,827 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '14e6ae3c-9221-4ec2-82f1-dd528feb70b5', 'text': 'put', 'data': 'H'}
+2024-11-19 06:23:50,827 - Client - INFO - Waiting for a reply for ID 14e6ae3c-9221-4ec2-82f1-dd528feb70b5
+2024-11-19 06:23:50,827 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "14e6ae3c-9221-4ec2-82f1-dd528feb70b5", "role": "server"}
+2024-11-19 06:23:50,828 - Client - INFO - Reply added for ID 14e6ae3c-9221-4ec2-82f1-dd528feb70b5
+2024-11-19 06:23:50,828 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:36:56,442 - Client - INFO - Logging started for Client
+2024-11-19 06:36:56,443 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:36:56,443 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:36:56,443 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '9bdf0ab5-076a-4b99-b45c-b08ccf05a617', 'text': 'put', 'data': 'H'}
+2024-11-19 06:36:56,443 - Client - INFO - Waiting for a reply for ID 9bdf0ab5-076a-4b99-b45c-b08ccf05a617
+2024-11-19 06:36:57,444 - Client - INFO - Waiting for ID 9bdf0ab5-076a-4b99-b45c-b08ccf05a617 timed out
+2024-11-19 06:36:57,463 - Client - INFO - Connection closed.
+2024-11-19 06:36:57,463 - Client - INFO - Client stopped.
+2024-11-19 06:38:09,082 - Client - INFO - Logging started for Client
+2024-11-19 06:38:09,083 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:38:09,083 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:38:09,083 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': 'fe053434-b658-40cc-9d37-5b725a1a4723', 'text': 'put', 'data': 'H'}
+2024-11-19 06:38:09,084 - Client - INFO - Waiting for a reply for ID fe053434-b658-40cc-9d37-5b725a1a4723
+2024-11-19 06:38:09,084 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "fe053434-b658-40cc-9d37-5b725a1a4723", "role": "server"}
+2024-11-19 06:38:09,084 - Client - INFO - Reply added for ID fe053434-b658-40cc-9d37-5b725a1a4723
+2024-11-19 06:38:09,084 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:38:09,096 - Client - INFO - Connection closed.
+2024-11-19 06:38:09,097 - Client - INFO - Client stopped.
+2024-11-19 06:40:47,521 - Client - INFO - Logging started for Client
+2024-11-19 06:40:47,521 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:40:47,522 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:40:47,522 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '716ff251-cd25-453a-971d-c825780e94c9', 'text': 'put', 'data': 'H'}
+2024-11-19 06:40:47,522 - Client - INFO - Waiting for a reply for ID 716ff251-cd25-453a-971d-c825780e94c9
+2024-11-19 06:40:47,522 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "716ff251-cd25-453a-971d-c825780e94c9", "role": "server"}
+2024-11-19 06:40:47,523 - Client - INFO - Reply added for ID 716ff251-cd25-453a-971d-c825780e94c9
+2024-11-19 06:40:47,523 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:40:47,536 - Client - INFO - Connection closed.
+2024-11-19 06:40:47,536 - Client - INFO - Client stopped.
+2024-11-19 06:41:50,870 - Client - INFO - Logging started for Client
+2024-11-19 06:41:50,871 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:41:50,871 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:41:50,871 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '31729474-bee3-4bd3-a4ae-7b20f58d189d', 'text': 'put', 'data': 'H'}
+2024-11-19 06:41:50,872 - Client - INFO - Waiting for a reply for ID 31729474-bee3-4bd3-a4ae-7b20f58d189d
+2024-11-19 06:41:50,872 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "31729474-bee3-4bd3-a4ae-7b20f58d189d", "role": "server"}
+2024-11-19 06:41:50,873 - Client - INFO - Reply added for ID 31729474-bee3-4bd3-a4ae-7b20f58d189d
+2024-11-19 06:41:50,873 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:41:50,886 - Client - INFO - Connection closed.
+2024-11-19 06:41:50,886 - Client - INFO - Client stopped.
+2024-11-19 06:44:33,989 - Client - INFO - Logging started for Client
+2024-11-19 06:44:33,999 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:44:33,999 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:44:33,999 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': 'eeb34ad4-9e58-4109-8359-3674b82e2da9', 'text': 'put', 'data': 'H'}
+2024-11-19 06:44:34,000 - Client - INFO - Waiting for a reply for ID eeb34ad4-9e58-4109-8359-3674b82e2da9
+2024-11-19 06:44:34,000 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "eeb34ad4-9e58-4109-8359-3674b82e2da9", "role": "server"}
+2024-11-19 06:44:34,000 - Client - INFO - Reply added for ID eeb34ad4-9e58-4109-8359-3674b82e2da9
+2024-11-19 06:44:34,000 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:44:34,016 - Client - INFO - Connection closed.
+2024-11-19 06:44:34,016 - Client - INFO - Client stopped.
+2024-11-19 06:45:38,698 - Client - INFO - Logging started for Client
+2024-11-19 06:45:38,699 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:45:38,700 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:45:38,700 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '208d6719-0f5d-4b02-9035-1e6f3f0e744c', 'text': 'put', 'data': 'H'}
+2024-11-19 06:45:38,701 - Client - INFO - Waiting for a reply for ID 208d6719-0f5d-4b02-9035-1e6f3f0e744c
+2024-11-19 06:45:38,701 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "208d6719-0f5d-4b02-9035-1e6f3f0e744c", "role": "server"}
+2024-11-19 06:45:38,702 - Client - INFO - Reply added for ID 208d6719-0f5d-4b02-9035-1e6f3f0e744c
+2024-11-19 06:45:38,702 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:45:38,717 - Client - INFO - Connection closed.
+2024-11-19 06:45:38,717 - Client - INFO - Client stopped.
+2024-11-19 06:48:06,104 - Client - INFO - Logging started for Client
+2024-11-19 06:48:06,105 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:48:06,105 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:48:06,105 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '5f3bcc8a-a0ba-43a8-9d3f-4a71df7c509b', 'text': 'put', 'data': 'H'}
+2024-11-19 06:48:06,106 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "5f3bcc8a-a0ba-43a8-9d3f-4a71df7c509b", "role": "server"}
+2024-11-19 06:48:06,106 - Client - INFO - Waiting for a reply for ID 5f3bcc8a-a0ba-43a8-9d3f-4a71df7c509b
+2024-11-19 06:48:06,106 - Client - INFO - Reply added for ID 5f3bcc8a-a0ba-43a8-9d3f-4a71df7c509b
+2024-11-19 06:48:06,106 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:48:06,119 - Client - INFO - Connection closed.
+2024-11-19 06:48:06,120 - Client - INFO - Client stopped.
+2024-11-19 06:49:44,952 - Client - INFO - Logging started for Client
+2024-11-19 06:49:44,953 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:49:44,953 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:49:44,953 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '989f1383-4cfe-49db-9f3d-5429dbef0b38', 'text': 'put', 'data': 'H'}
+2024-11-19 06:49:44,954 - Client - INFO - Waiting for a reply for ID 989f1383-4cfe-49db-9f3d-5429dbef0b38
+2024-11-19 06:49:44,954 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "989f1383-4cfe-49db-9f3d-5429dbef0b38", "role": "server"}
+2024-11-19 06:49:44,954 - Client - INFO - Reply added for ID 989f1383-4cfe-49db-9f3d-5429dbef0b38
+2024-11-19 06:49:44,955 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '08aebac9-47d9-4890-993f-610b7c38fd08', 'text': 'put', 'data': 'Hello'}
+2024-11-19 06:49:44,956 - Client - INFO - Remaining incoming messages: 1
+2024-11-19 06:49:44,957 - Client - INFO - Waiting for a reply for ID 08aebac9-47d9-4890-993f-610b7c38fd08
+2024-11-19 06:49:44,957 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "08aebac9-47d9-4890-993f-610b7c38fd08", "role": "server"}
+2024-11-19 06:49:44,958 - Client - INFO - Reply added for ID 08aebac9-47d9-4890-993f-610b7c38fd08
+2024-11-19 06:49:44,958 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:50:07,839 - Client - INFO - Logging started for Client
+2024-11-19 06:50:07,840 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:50:07,840 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:50:07,840 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '53401f4e-68b2-445f-844d-4fd85fdc8284', 'text': 'put', 'data': 'H'}
+2024-11-19 06:50:07,842 - Client - INFO - Waiting for a reply for ID 53401f4e-68b2-445f-844d-4fd85fdc8284
+2024-11-19 06:50:07,842 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "53401f4e-68b2-445f-844d-4fd85fdc8284", "role": "server"}
+2024-11-19 06:50:07,842 - Client - INFO - Reply added for ID 53401f4e-68b2-445f-844d-4fd85fdc8284
+2024-11-19 06:50:07,842 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '28924e94-1e80-4d3f-87e1-cf7ba185356f', 'text': 'put', 'data': 'Hello'}
+2024-11-19 06:50:07,842 - Client - INFO - Remaining incoming messages: 1
+2024-11-19 06:50:07,843 - Client - INFO - Waiting for a reply for ID 28924e94-1e80-4d3f-87e1-cf7ba185356f
+2024-11-19 06:50:07,843 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "28924e94-1e80-4d3f-87e1-cf7ba185356f", "role": "server"}
+2024-11-19 06:50:07,843 - Client - INFO - Reply added for ID 28924e94-1e80-4d3f-87e1-cf7ba185356f
+2024-11-19 06:50:07,844 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:51:43,837 - Client - INFO - Logging started for Client
+2024-11-19 06:51:43,838 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:51:43,838 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:51:43,838 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': 'f5cc05f2-92c8-4ede-95be-aaeb6d1dd1ab', 'text': 'put', 'data': 'Hello'}
+2024-11-19 06:51:43,840 - Client - INFO - Waiting for a reply for ID f5cc05f2-92c8-4ede-95be-aaeb6d1dd1ab
+2024-11-19 06:51:43,840 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "f5cc05f2-92c8-4ede-95be-aaeb6d1dd1ab", "role": "server"}
+2024-11-19 06:51:43,840 - Client - INFO - Reply added for ID f5cc05f2-92c8-4ede-95be-aaeb6d1dd1ab
+2024-11-19 06:51:43,841 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:54:22,258 - Client - INFO - Logging started for Client
+2024-11-19 06:54:22,259 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:54:22,259 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:54:22,260 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '1a2d38d4-564c-4104-acc3-f9fe7c6345b3', 'text': 'put', 'data': 'Hello'}
+2024-11-19 06:54:22,260 - Client - INFO - Waiting for a reply for ID 1a2d38d4-564c-4104-acc3-f9fe7c6345b3
+2024-11-19 06:54:22,260 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "1a2d38d4-564c-4104-acc3-f9fe7c6345b3", "role": "server"}
+2024-11-19 06:54:22,260 - Client - INFO - Reply added for ID 1a2d38d4-564c-4104-acc3-f9fe7c6345b3
+2024-11-19 06:54:22,261 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:55:32,719 - Client - INFO - Logging started for Client
+2024-11-19 06:55:32,720 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:55:32,720 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:55:32,720 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': 'eb31e2f5-eaa8-4ed2-a08a-1bd483eed12c', 'text': 'put', 'data': 'Hello'}
+2024-11-19 06:55:32,721 - Client - INFO - Waiting for a reply for ID eb31e2f5-eaa8-4ed2-a08a-1bd483eed12c
+2024-11-19 06:55:32,721 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "eb31e2f5-eaa8-4ed2-a08a-1bd483eed12c", "role": "server"}
+2024-11-19 06:55:32,721 - Client - INFO - Reply added for ID eb31e2f5-eaa8-4ed2-a08a-1bd483eed12c
+2024-11-19 06:55:32,721 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:55:32,737 - Client - INFO - Connection closed.
+2024-11-19 06:55:32,737 - Client - INFO - Client stopped.
+2024-11-19 06:56:37,952 - Client - INFO - Logging started for Client
+2024-11-19 06:56:37,952 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:56:37,953 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:56:37,953 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '3eeca067-0e38-44fc-a47e-363893157fca', 'text': 'put', 'data': 'Hello'}
+2024-11-19 06:56:37,953 - Client - INFO - Waiting for a reply for ID 3eeca067-0e38-44fc-a47e-363893157fca
+2024-11-19 06:56:37,954 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "3eeca067-0e38-44fc-a47e-363893157fca", "role": "server"}
+2024-11-19 06:56:37,954 - Client - INFO - Reply added for ID 3eeca067-0e38-44fc-a47e-363893157fca
+2024-11-19 06:56:37,954 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:56:37,968 - Client - INFO - Connection closed.
+2024-11-19 06:56:37,968 - Client - INFO - Client stopped.
+2024-11-19 06:57:53,205 - Client - INFO - Logging started for Client
+2024-11-19 06:57:53,206 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:57:53,206 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:57:53,206 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': 'a1674d14-27d3-4adb-8446-c0ca3a2af69c', 'text': 'put', 'data': 'Hello'}
+2024-11-19 06:57:53,207 - Client - INFO - Waiting for a reply for ID a1674d14-27d3-4adb-8446-c0ca3a2af69c
+2024-11-19 06:57:53,208 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "a1674d14-27d3-4adb-8446-c0ca3a2af69c", "role": "server"}
+2024-11-19 06:57:53,208 - Client - INFO - Reply added for ID a1674d14-27d3-4adb-8446-c0ca3a2af69c
+2024-11-19 06:57:53,208 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:57:53,223 - Client - INFO - Connection closed.
+2024-11-19 06:57:53,223 - Client - INFO - Client stopped.
+2024-11-19 06:59:21,326 - Client - INFO - Logging started for Client
+2024-11-19 06:59:21,327 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 06:59:21,327 - Client - INFO - New thread started to receive reply.
+2024-11-19 06:59:21,328 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': 'd26797ba-37d7-44f0-a5b6-0707bd241a96', 'text': 'put', 'data': 'Hello'}
+2024-11-19 06:59:21,329 - Client - INFO - Waiting for a reply for ID d26797ba-37d7-44f0-a5b6-0707bd241a96
+2024-11-19 06:59:21,329 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "d26797ba-37d7-44f0-a5b6-0707bd241a96", "role": "server"}
+2024-11-19 06:59:21,329 - Client - INFO - Reply added for ID d26797ba-37d7-44f0-a5b6-0707bd241a96
+2024-11-19 06:59:21,330 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 06:59:21,342 - Client - INFO - Connection closed.
+2024-11-19 06:59:21,342 - Client - INFO - Client stopped.
+2024-11-19 07:02:12,568 - Client - INFO - Logging started for Client
+2024-11-19 07:02:12,569 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 07:02:12,569 - Client - INFO - New thread started to receive reply.
+2024-11-19 07:02:12,569 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '2e2d9c79-30de-4484-b0bb-b8e5f400dd3a', 'text': 'put', 'data': 'Hello'}
+2024-11-19 07:02:12,570 - Client - INFO - Waiting for a reply for ID 2e2d9c79-30de-4484-b0bb-b8e5f400dd3a
+2024-11-19 07:02:12,570 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "2e2d9c79-30de-4484-b0bb-b8e5f400dd3a", "role": "server"}
+2024-11-19 07:02:12,570 - Client - INFO - Reply added for ID 2e2d9c79-30de-4484-b0bb-b8e5f400dd3a
+2024-11-19 07:02:12,570 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 07:02:12,582 - Client - INFO - Connection closed.
+2024-11-19 07:02:12,582 - Client - INFO - Client stopped.
+2024-11-19 07:03:32,535 - Client - INFO - Logging started for Client
+2024-11-19 07:03:32,536 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 07:03:32,537 - Client - INFO - New thread started to receive reply.
+2024-11-19 07:03:32,537 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '78710edd-8f82-431f-88dd-8c03d02c395b', 'text': 'put', 'data': 'Hello'}
+2024-11-19 07:03:32,538 - Client - INFO - Waiting for a reply for ID 78710edd-8f82-431f-88dd-8c03d02c395b
+2024-11-19 07:03:32,538 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "78710edd-8f82-431f-88dd-8c03d02c395b", "role": "server"}
+2024-11-19 07:03:32,538 - Client - INFO - Reply added for ID 78710edd-8f82-431f-88dd-8c03d02c395b
+2024-11-19 07:03:32,538 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 07:03:32,550 - Client - INFO - Connection closed.
+2024-11-19 07:03:32,550 - Client - INFO - Client stopped.
+2024-11-19 07:04:53,754 - Client - INFO - Logging started for Client
+2024-11-19 07:04:53,755 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 07:04:53,755 - Client - INFO - New thread started to receive reply.
+2024-11-19 07:04:53,756 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': 'ea7e2812-f1e4-4a44-bc68-11368ec74312', 'text': 'put', 'data': 'H'}
+2024-11-19 07:04:53,756 - Client - INFO - Waiting for a reply for ID ea7e2812-f1e4-4a44-bc68-11368ec74312
+2024-11-19 07:04:53,756 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "ea7e2812-f1e4-4a44-bc68-11368ec74312", "role": "server"}
+2024-11-19 07:04:53,756 - Client - INFO - Reply added for ID ea7e2812-f1e4-4a44-bc68-11368ec74312
+2024-11-19 07:04:53,756 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '5dcf2759-9b0a-4723-9216-a4faa677b13d', 'text': 'put', 'data': 'Hello'}
+2024-11-19 07:04:53,757 - Client - INFO - Remaining incoming messages: 1
+2024-11-19 07:04:53,757 - Client - INFO - Waiting for a reply for ID 5dcf2759-9b0a-4723-9216-a4faa677b13d
+2024-11-19 07:04:53,757 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "5dcf2759-9b0a-4723-9216-a4faa677b13d", "role": "server"}
+2024-11-19 07:04:53,757 - Client - INFO - Reply added for ID 5dcf2759-9b0a-4723-9216-a4faa677b13d
+2024-11-19 07:04:53,758 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 07:04:53,770 - Client - INFO - Connection closed.
+2024-11-19 07:04:53,771 - Client - INFO - Client stopped.
+2024-11-19 07:08:28,480 - Client - INFO - Logging started for Client
+2024-11-19 07:08:28,481 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 07:08:28,482 - Client - INFO - New thread started to receive reply.
+2024-11-19 07:08:28,482 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '4befdcea-bcc0-4528-944d-fca013969c65', 'text': 'put', 'data': 'H'}
+2024-11-19 07:08:28,483 - Client - INFO - Waiting for a reply for ID 4befdcea-bcc0-4528-944d-fca013969c65
+2024-11-19 07:08:28,483 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "4befdcea-bcc0-4528-944d-fca013969c65", "role": "server"}
+2024-11-19 07:08:28,483 - Client - INFO - Reply added for ID 4befdcea-bcc0-4528-944d-fca013969c65
+2024-11-19 07:08:28,484 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '5de23a71-a48b-49c5-ba5d-3fff32114359', 'text': 'put', 'data': 'Hello'}
+2024-11-19 07:08:28,484 - Client - INFO - Remaining incoming messages: 1
+2024-11-19 07:08:28,484 - Client - INFO - Waiting for a reply for ID 5de23a71-a48b-49c5-ba5d-3fff32114359
+2024-11-19 07:08:28,485 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "5de23a71-a48b-49c5-ba5d-3fff32114359", "role": "server"}
+2024-11-19 07:08:28,485 - Client - INFO - Reply added for ID 5de23a71-a48b-49c5-ba5d-3fff32114359
+2024-11-19 07:08:28,486 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 07:08:54,862 - Client - INFO - Logging started for Client
+2024-11-19 07:08:54,863 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 07:08:54,863 - Client - INFO - New thread started to receive reply.
+2024-11-19 07:08:54,864 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '9b5696bb-ef76-4049-83ed-b6b6f85f6a96', 'text': 'put', 'data': 'H'}
+2024-11-19 07:08:54,865 - Client - INFO - Waiting for a reply for ID 9b5696bb-ef76-4049-83ed-b6b6f85f6a96
+2024-11-19 07:08:54,865 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "9b5696bb-ef76-4049-83ed-b6b6f85f6a96", "role": "server"}
+2024-11-19 07:08:54,865 - Client - INFO - Reply added for ID 9b5696bb-ef76-4049-83ed-b6b6f85f6a96
+2024-11-19 07:08:54,865 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': 'fe071bba-dd6d-4ee0-af94-c944643ffef8', 'text': 'put', 'data': 'Hello'}
+2024-11-19 07:08:54,865 - Client - INFO - Remaining incoming messages: 1
+2024-11-19 07:08:54,866 - Client - INFO - Waiting for a reply for ID fe071bba-dd6d-4ee0-af94-c944643ffef8
+2024-11-19 07:08:54,866 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "fe071bba-dd6d-4ee0-af94-c944643ffef8", "role": "server"}
+2024-11-19 07:08:54,866 - Client - INFO - Reply added for ID fe071bba-dd6d-4ee0-af94-c944643ffef8
+2024-11-19 07:08:54,867 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 07:08:54,878 - Client - INFO - Connection closed.
+2024-11-19 07:08:54,879 - Client - INFO - Client stopped.
+2024-11-19 07:10:00,938 - Client - INFO - Logging started for Client
+2024-11-19 07:10:00,939 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 07:10:00,939 - Client - INFO - New thread started to receive reply.
+2024-11-19 07:10:00,939 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '93426c4e-1103-4ba8-b452-e2653680a521', 'text': 'put', 'data': 'H'}
+2024-11-19 07:10:00,940 - Client - INFO - Waiting for a reply for ID 93426c4e-1103-4ba8-b452-e2653680a521
+2024-11-19 07:10:00,940 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "93426c4e-1103-4ba8-b452-e2653680a521", "role": "server"}
+2024-11-19 07:10:00,940 - Client - INFO - Reply added for ID 93426c4e-1103-4ba8-b452-e2653680a521
+2024-11-19 07:10:00,941 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': 'e82b62b7-a283-4ba4-af90-676d16d19a20', 'text': 'put', 'data': 'Hello'}
+2024-11-19 07:10:00,941 - Client - INFO - Remaining incoming messages: 1
+2024-11-19 07:10:00,941 - Client - INFO - Waiting for a reply for ID e82b62b7-a283-4ba4-af90-676d16d19a20
+2024-11-19 07:10:00,941 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "e82b62b7-a283-4ba4-af90-676d16d19a20", "role": "server"}
+2024-11-19 07:10:00,941 - Client - INFO - Reply added for ID e82b62b7-a283-4ba4-af90-676d16d19a20
+2024-11-19 07:10:00,942 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 07:10:00,957 - Client - INFO - Connection closed.
+2024-11-19 07:10:00,957 - Client - INFO - Client stopped.
+2024-11-19 07:11:47,299 - Client - INFO - Logging started for Client
+2024-11-19 07:11:47,300 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 07:11:47,300 - Client - INFO - New thread started to receive reply.
+2024-11-19 07:11:47,300 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '62ff4ad9-178c-42f5-9906-4a83dda79697', 'text': 'put', 'data': 'H'}
+2024-11-19 07:11:47,301 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "62ff4ad9-178c-42f5-9906-4a83dda79697", "role": "server"}
+2024-11-19 07:11:47,301 - Client - INFO - Waiting for a reply for ID 62ff4ad9-178c-42f5-9906-4a83dda79697
+2024-11-19 07:11:47,301 - Client - INFO - Reply added for ID 62ff4ad9-178c-42f5-9906-4a83dda79697
+2024-11-19 07:11:47,301 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '9cb02ce1-9111-45d6-8188-6b4d6a722951', 'text': 'put', 'data': 'Hello'}
+2024-11-19 07:11:47,301 - Client - INFO - Remaining incoming messages: 1
+2024-11-19 07:11:47,302 - Client - INFO - Waiting for a reply for ID 9cb02ce1-9111-45d6-8188-6b4d6a722951
+2024-11-19 07:11:47,302 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "9cb02ce1-9111-45d6-8188-6b4d6a722951", "role": "server"}
+2024-11-19 07:11:47,302 - Client - INFO - Reply added for ID 9cb02ce1-9111-45d6-8188-6b4d6a722951
+2024-11-19 07:11:47,302 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 07:12:04,023 - Client - INFO - Logging started for Client
+2024-11-19 07:12:04,024 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 07:12:04,025 - Client - INFO - New thread started to receive reply.
+2024-11-19 07:12:04,025 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '08b00869-9443-4c2f-a08c-be82d11c0491', 'text': 'put', 'data': 'H'}
+2024-11-19 07:12:04,026 - Client - INFO - Waiting for a reply for ID 08b00869-9443-4c2f-a08c-be82d11c0491
+2024-11-19 07:12:04,026 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "08b00869-9443-4c2f-a08c-be82d11c0491", "role": "server"}
+2024-11-19 07:12:04,026 - Client - INFO - Reply added for ID 08b00869-9443-4c2f-a08c-be82d11c0491
+2024-11-19 07:12:04,026 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': 'f0dc4280-696b-4c56-8380-4f9c676a2b9e', 'text': 'put', 'data': 'Hello'}
+2024-11-19 07:12:04,026 - Client - INFO - Remaining incoming messages: 1
+2024-11-19 07:12:04,027 - Client - INFO - Waiting for a reply for ID f0dc4280-696b-4c56-8380-4f9c676a2b9e
+2024-11-19 07:12:04,027 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "f0dc4280-696b-4c56-8380-4f9c676a2b9e", "role": "server"}
+2024-11-19 07:12:04,027 - Client - INFO - Reply added for ID f0dc4280-696b-4c56-8380-4f9c676a2b9e
+2024-11-19 07:12:04,027 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 07:12:04,040 - Client - INFO - Connection closed.
+2024-11-19 07:12:04,040 - Client - INFO - Client stopped.
+2024-11-19 07:14:28,728 - Client - INFO - Logging started for Client
+2024-11-19 07:14:28,728 - Client - INFO - Successfully established request channel with Server1
+2024-11-19 07:14:28,729 - Client - INFO - New thread started to receive reply.
+2024-11-19 07:14:28,729 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '1dd1fad4-d892-49c7-aad3-49158c7d3e1f', 'text': 'put', 'data': 'H'}
+2024-11-19 07:14:28,729 - Client - INFO - Waiting for a reply for ID 1dd1fad4-d892-49c7-aad3-49158c7d3e1f
+2024-11-19 07:14:28,730 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "1dd1fad4-d892-49c7-aad3-49158c7d3e1f", "role": "server"}
+2024-11-19 07:14:28,730 - Client - INFO - Reply added for ID 1dd1fad4-d892-49c7-aad3-49158c7d3e1f
+2024-11-19 07:14:28,730 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '4ab63254-5c8d-4a11-98aa-7cf577e3b935', 'text': 'put', 'data': 'Hello'}
+2024-11-19 07:14:28,730 - Client - INFO - Remaining incoming messages: 1
+2024-11-19 07:14:28,730 - Client - INFO - Waiting for a reply for ID 4ab63254-5c8d-4a11-98aa-7cf577e3b935
+2024-11-19 07:14:28,731 - Client - INFO - Received reply from server: {"source": "Server1", "destination": "Client", "channel": "request", "type": "reply", "text": "Data received", "id": "4ab63254-5c8d-4a11-98aa-7cf577e3b935", "role": "server"}
+2024-11-19 07:14:28,731 - Client - INFO - Reply added for ID 4ab63254-5c8d-4a11-98aa-7cf577e3b935
+2024-11-19 07:14:28,731 - Client - INFO - Remaining incoming messages: 0
+2024-11-19 07:14:28,745 - Client - INFO - Connection closed.
+2024-11-19 07:14:28,745 - Client - INFO - Client stopped.

@@ -1,6 +1,8 @@
 from typing import Any, Dict
 from server import Server
+import copy
 import hashlib
+import threading
 
 class HashRing:
     def __init__(self, server: str, host: str, port: int, ring = None, network = None, vnodes = 4):
@@ -9,7 +11,7 @@ class HashRing:
         self.network = network or {} # key: server name, value: tuple of host and port
         self.add_node(server, host, port, vnodes)
 
-    def add_node(self, host, port, server: str, vnodes:int = 4):
+    def add_node(self, server: str, host, port, vnodes:int = 4):
         if server in self.ring:
             return
         self.network[server] = (host, port)
@@ -19,8 +21,8 @@ class HashRing:
             segments.sort(key=lambda x: x[0], reverse=True)
             for i in range(vnodes):
                 segment = segments.pop(0)
-                revised_keys = (segment[1][0], (segment[1][1]+segment[1][0]-1)//2)
-                added_keys = ((segment[1][1]+segment[1][0]+1)//2, segment[1][1])
+                revised_keys = [segment[1][0], (segment[1][1]+segment[1][0]-1)//2]
+                added_keys = [(segment[1][1]+segment[1][0]+1)//2, segment[1][1]]
                 self.ring[server].append(added_keys)
                 self.ring[segment[2]].remove(segment[1])
                 self.ring[segment[2]].append(revised_keys)
@@ -28,16 +30,17 @@ class HashRing:
                 # here, also need to ensure that it receives the data for the keys in its storage range
                 # This is JUST KEY ALLCOATION, not data transfer
         else:
-            # first node is added with vnodes and hash range of 0 to 2^256, divide this range into vnode parts
+            # first node is added with vnodes and hash range of 0 to 2^64, divide this range into vnode parts
+            #256 bits was getting too big, and was causing problems
             self.ring[server] = []
             for i in range(vnodes):
-                self.ring[server].append((i*(2**4)//vnodes, ((i+1)*(2**4)//vnodes)-1))
+                self.ring[server].append([i*(2**64)//vnodes, ((i+1)*(2**64)//vnodes)-1])
             
     def get_all_segments(self):
         segments = []
         for key, value in self.ring.items():
             for i in range(len(value)):
-                segments.append((value[i][1]-value[i][0], value[i], key))
+                segments.append([value[i][1]-value[i][0], value[i], key])
         return segments
 
     def remove_node(self, server:str, vnodes:int = 4):
@@ -53,12 +56,12 @@ class HashRing:
                 if all_segments[j][1][1] == segment[0]-1:
                     down = all_segments.pop(j)
             if up[0] >= down[0]:
-                revised_keys = (down[1][0], segment[1])
+                revised_keys = [down[1][0], segment[1]]
                 self.ring[down[2]].remove(down[1])
                 self.ring[down[2]].append(revised_keys)
                 sorted(self.ring[down[2]], key=lambda x: x[0])
             else:
-                revised_keys = (segment[0], up[1][1])
+                revised_keys = [segment[0], up[1][1]]
                 self.ring[up[2]].remove(up[1])
                 self.ring[up[2]].append(revised_keys)
                 sorted(self.ring[up[2]], key=lambda x: x[0])
@@ -97,14 +100,23 @@ class Dynamo(Server):
         super().__init__(name, host, port)
         self.data = {} # stores data corresponding to the keys it have
         self.network_id = network_id
-
-        if seed:
-            hring = HashRing.from_dict(self.connect_seed(seed))
-            self.ring = HashRing(self.name, self.host, self.port, hring.ring, hring.network, hring.vnodes)
+        self.seed = seed
+    
+    def start(self) -> None:
+        super().start()
+        if self.seed:
+            hring = HashRing.from_dict(self.connect_seed(self.seed))
+            ring = copy.deepcopy(hring.ring)
+            network = copy.deepcopy(hring.network)
+            self.ring = HashRing(self.name, self.host, self.port, ring, network, hring.vnodes)
+            # print(hring.to_dict())
+            # print(self.ring.to_dict())
             self.connect_all(hring.network)
             for key in self.ring.ring[self.name]:
-                reply = self.send_message({"source": self.name, "destination": hring.get_node(key[0]), "channel": "transfer", "type": "prompt", "text": "get_data", "data": (key,self.ring.to_dict())})
-                self.data.update(reply["data"])
+                reply = self.send_message({"source": self.name, "destination": hring.get_node(key[0]), "channel": "transfer", "type": "prompt", "text": "get_data", "role": "server", "data": (key,self.ring.to_dict())})
+                self.logger.info(f"Received data message: {reply}")
+                if reply["data"]:
+                    self.data.update(reply["data"])
 
         else:
             self.ring = HashRing(self.name, self.host, self.port)
@@ -143,12 +155,17 @@ class Dynamo(Server):
     def send_data(self, keys):
         data = {}
         key_min, key_max = keys
+        # print(self.name)
         for key, val in self.data.items():
-            if key >= key_min and key <= key_max:
+            # print(key, key_min, key_max)
+            if int(key) >= key_min and int(key) <= key_max:
                 data[key] = val
-                del self.data[key]
+                # print("data")
+                # print(key, val)
+        for key in data:
+            self.data.pop(key)
         return data
     
     def put_data(self, data):
-        self.data[int(hashlib.sha256(data.encode('utf-8')).hexdigest(),16)] = data
+        self.data[str(int.from_bytes(hashlib.sha512(data.encode('utf-8')).digest()[:8], 'big'))] = data
         pass
