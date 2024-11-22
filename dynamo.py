@@ -105,7 +105,7 @@ class Dynamo(Server):
     def start(self) -> None:
         super().start()
         if self.seed:
-            hring = HashRing.from_dict(self.connect_seed(self.seed))
+            hring = HashRing.from_dict(self.connect_seed())
             ring = copy.deepcopy(hring.ring)
             network = copy.deepcopy(hring.network)
             self.ring = HashRing(self.name, self.host, self.port, ring, network, hring.vnodes)
@@ -117,13 +117,15 @@ class Dynamo(Server):
                 self.logger.info(f"Received data message: {reply}")
                 if reply["data"]:
                     self.data.update(reply["data"])
-
+            hring.ring = self.ring.ring
+            hring.network = self.ring.network
         else:
             self.ring = HashRing(self.name, self.host, self.port)
 
-    def connect_seed(self, seed: dict):
-        name = self.connect_to_server(seed['host'], seed['port'])
-        reply = self.send_message({"source": self.name, "destination": name, "channel": "transfer", "type": "prompt", "text": "seed_connect", "role": "server"})
+    def connect_seed(self):
+        name = self.connect_to_server(self.seed['host'], self.seed['port'])
+        self.seed["name"] = name
+        reply = self.send_message({"source": self.name, "destination": self.seed["name"], "channel": "transfer", "type": "prompt", "text": "seed_connect", "role": "server"})
         return reply["data"]
     
     def connect_all(self, servers) -> None:
@@ -138,6 +140,8 @@ class Dynamo(Server):
                 self.send_message({"source": self.name, "destination": message["source"], "channel": "transfer", "type": "reply", "text": "seed_connect", "role": "server", "id": message.get("id"), "data": self.ring.to_dict()})
             elif message["text"] == "get_data":
                 data = self.send_data(message["data"][0])
+                for key in data:
+                    self.data.pop(key)
                 self.ring = HashRing.from_dict(message["data"][1])
                 self.send_message({"source": self.name, "destination": message["source"], "channel": "transfer", "type": "reply", "text": "get_data", "role": "server", "id": message.get("id"), "data": data})
         pass
@@ -146,10 +150,33 @@ class Dynamo(Server):
         """Handles a request message."""
         self.logger.info(f"Received request message: {message}")
         if message.get("type") == "prompt":
-            if message.get("text") == "put":
-                self.put_data(message.get("data"))
-                reply = {"source": self.name, "destination": message.get("source"), "channel": "request", "type": "reply", "text": "Data received", "id": message.get("id"), "role": "server"}
-                self.send_message(reply)
+            key = self.hash_calc(str(message.get("key")))
+            node = self.ring.get_node(int(key))
+            if node == self.name:
+                if message.get("text") == "put":
+                    self.connect_to_server
+                    self.put_data(key, message.get("data"))
+                    reply = {"source": self.name, "destination": message.get("source"), "channel": "request", "type": "reply", "text": "Data received", "id": message.get("id"), "role": "server"}
+                    self.send_message(reply)
+                elif message.get("text") == "get":
+                    self.logger.info(f"Data: {self.data.get(key)}")
+                    data = self.send_data([int(key), int(key)])
+                    reply = {"source": self.name, "destination": message.get("source"), "channel": "request", "type": "reply", "text": "Data received", "id": message.get("id"), "role": "server", "data": data}
+                    self.send_message(reply)
+            else:
+                original_source = copy.deepcopy(message.get("source"))
+                original_id = copy.deepcopy(message.get("id"))
+                message.set("source", self.name)
+                message.set("destination", node)
+                message.pop("id")
+                # print(message, "message")
+                reply = self.send_message(message._msg_d)
+                self.logger.info(f"Received reply message: {reply}")
+                if reply["text"] == "Data received":
+                    reply.set("source", self.name)
+                    reply.set("destination", original_source)
+                    reply.set("id", original_id)
+                    self.send_message(reply._msg_d)
         pass
 
     def send_data(self, keys):
@@ -162,10 +189,11 @@ class Dynamo(Server):
                 data[key] = val
                 # print("data")
                 # print(key, val)
-        for key in data:
-            self.data.pop(key)
         return data
     
-    def put_data(self, data):
-        self.data[str(int.from_bytes(hashlib.sha512(data.encode('utf-8')).digest()[:8], 'big'))] = data
+    def hash_calc(self, data):
+        return str(int.from_bytes(hashlib.sha512(data.encode('utf-8')).digest()[:8], 'big'))
+    
+    def put_data(self, key, data):
+        self.data[key] = data
         pass

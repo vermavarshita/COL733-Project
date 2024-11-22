@@ -79,7 +79,7 @@ class Client:
                 reply_thread.start()
             self.client_socket.sendall(msg.serialize())
             self.logger.info(f"Sent prompt to server: {message}")
-            reply=self.buffer.wait_on(message["id"],timeout=1)
+            reply=self.buffer.wait_on(message["id"],timeout=5)
             return reply            
         except Exception as e:
             self.logger.error(f"Failed to send prompt: {e}")
