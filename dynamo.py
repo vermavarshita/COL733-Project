@@ -3,17 +3,21 @@ from server import Server
 import copy
 import hashlib
 import threading
+import random
+import time
 
 class HashRing:
-    def __init__(self, server: str, host: str, port: int, ring = None, network = None, vnodes = 4):
+    def __init__(self, server: str, host: str, port: int, ring = None, vtime = None, network = None, vnodes = 4):
         self.ring = ring or {}   # key: server name , value: list of tuples of range of hash values
         self.vnodes = vnodes
         self.network = network or {} # key: server name, value: tuple of host and port
+        self.v_time = vtime or {}
         self.add_node(server, host, port, vnodes)
 
     def add_node(self, server: str, host, port, vnodes:int = 4):
         if server in self.ring:
             return
+        self.v_time[server] = 1
         self.network[server] = (host, port)
         if self.ring:
             self.ring[server] = []
@@ -34,7 +38,7 @@ class HashRing:
             #256 bits was getting too big, and was causing problems
             self.ring[server] = []
             for i in range(vnodes):
-                self.ring[server].append([i*(2**64)//vnodes, ((i+1)*(2**64)//vnodes)-1])
+                self.ring[server].append([i*(2**32)//vnodes, ((i+1)*(2**32)//vnodes)-1])
             
     def get_all_segments(self):
         segments = []
@@ -47,6 +51,7 @@ class HashRing:
         if server not in self.ring:
             return
         all_segments = self.get_all_segments()
+        del self.v_time[server]
         del self.network[server]
         for i in range(vnodes):
             segment = self.ring[server].pop(0)
@@ -82,6 +87,7 @@ class HashRing:
         return {
             "ring": self.ring,
             "vnodes": self.vnodes,
+            "v_time": self.v_time,
             "network": self.network,
         }
 
@@ -91,6 +97,7 @@ class HashRing:
         obj = cls(server=None, host=None, port=None)  # Create an empty instance
         obj.ring = data["ring"]
         obj.vnodes = data["vnodes"]
+        obj.v_time = data["v_time"]
         obj.network = data["network"]
         return obj
     
@@ -108,7 +115,9 @@ class Dynamo(Server):
             hring = HashRing.from_dict(self.connect_seed())
             ring = copy.deepcopy(hring.ring)
             network = copy.deepcopy(hring.network)
-            self.ring = HashRing(self.name, self.host, self.port, ring, network, hring.vnodes)
+            v_time = copy.deepcopy(hring.v_time)
+            self.ring = HashRing(self.name, self.host, self.port, ring, v_time, network, hring.vnodes)
+            self.ring.v_time[self.seed["name"]] += 1
             # print(hring.to_dict())
             # print(self.ring.to_dict())
             self.connect_all(hring.network)
@@ -117,10 +126,14 @@ class Dynamo(Server):
                 self.logger.info(f"Received data message: {reply}")
                 if reply["data"]:
                     self.data.update(reply["data"])
+            # Ponder upon should we put a lock on this update - CHECK
             hring.ring = self.ring.ring
             hring.network = self.ring.network
+            hring.v_time = self.ring.v_time
         else:
             self.ring = HashRing(self.name, self.host, self.port)
+        
+        threading.Thread(target=self._gossip_periodically, daemon=True).start()
 
     def connect_seed(self):
         name = self.connect_to_server(self.seed['host'], self.seed['port'])
@@ -192,8 +205,62 @@ class Dynamo(Server):
         return data
     
     def hash_calc(self, data):
-        return str(int.from_bytes(hashlib.sha512(data.encode('utf-8')).digest()[:8], 'big'))
+        return str(int.from_bytes(hashlib.sha512(data.encode('utf-8')).digest()[:16], 'big'))
     
     def put_data(self, key, data):
         self.data[key] = data
-        pass
+    
+    # Adding the Gossip Protocol to the Dynamo class
+
+    # - don't need to transfer data within gossip, as we do that as and when a new node joins, or an existing node leaves
+
+    def is_greater_vtime(self, vtime1, vtime2):
+        for key in vtime1.keys():
+            if key in vtime2 and vtime1[key] < vtime2[key]:
+                return False
+        return True
+
+    def handle_gossip(self, message: Dict[str, Any]) -> None:
+        """Handles a gossip message."""
+        self.logger.info(f"Received gossip message: {message}")
+        if message.get("type") == "prompt":
+            hash_ring_received = HashRing.from_dict(message.get("data"))
+            if self.is_greater_vtime(hash_ring_received.v_time, self.ring.v_time):
+                self.update_for_gossip(hash_ring_received)
+                self.send_message({"source": self.name, "destination": message["source"], "channel": "gossip", "type": "reply", "text": "gossip received", "id": message.get("id"), "role": "server", "data": {}})
+            else:
+                self.send_message({"source": self.name, "destination": message["source"], "channel": "gossip", "type": "reply", "text": "gossip received", "id": message.get("id"), "role": "server", "data": self.ring.to_dict()})
+
+    def update_for_gossip(self, hash_ring_received):
+        for server in hash_ring_received.network.keys():
+            if server not in self.ring.ring:
+                self.connect_to_server(hash_ring_received.network[server][0], hash_ring_received.network[server][1])
+        self.ring = hash_ring_received
+    
+    def _gossip_periodically(self) -> None:
+        """Periodically sends gossip messages to random servers."""
+        while self.running:
+            try:
+                random_server = random.choice(list(self.transfer_channels.keys()))
+                gossip_msg = {
+                    "source": self.name,
+                    "destination": random_server,
+                    "channel": "gossip",
+                    "type": "prompt",
+                    "role": "server",
+                    "text": "gossip initiated",
+                    "data": self.ring.to_dict()
+                }
+                reply = self.send_message(gossip_msg)
+
+                if reply.get("text") == "gossip received" and reply.get("data"):
+                    self.logger.info(f"Gossip successful with server {random_server}")
+                    self.update_for_gossip(reply.get(HashRing.from_dict(reply.get("data"))))
+                elif reply.get("text") == "gossip received":
+                    self.logger.info(f"Gossip successful with server {random_server}")
+                
+            except Exception as e:
+                self.logger.error(f"Gossip error with server: {e}")
+
+            time.sleep(1)  # Wait 1 second before the next gossip
+

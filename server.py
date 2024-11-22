@@ -42,12 +42,10 @@ class Server(ABC):
         """Handles a transfer message."""
         pass
 
+    @abstractmethod
     def handle_gossip(self, message: Dict[str, Any]) -> None:
         """Handles a gossip message."""
-        self.logger.info(f"Received gossip message: {message}")
-        if message.get("type") == "prompt":
-            reply = {"source": self.name, "destination": message.get("source"), "channel": "request", "type": "reply", "text": "Hello on request channel", "id": message.get("id"), "role": "server"}
-            self.send_message(reply)
+        pass
 
     @abstractmethod
     def handle_transfer(self, message: Dict[str, Any]) -> None:
