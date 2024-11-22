@@ -214,7 +214,7 @@ class Dynamo(Server):
 
     # - don't need to transfer data within gossip, as we do that as and when a new node joins, or an existing node leaves
 
-    def is_greater_vtime(self, vtime1, vtime2):
+    def is_greater_eq_vtime(self, vtime1, vtime2):
         for key in vtime1.keys():
             if key in vtime2 and vtime1[key] < vtime2[key]:
                 return False
@@ -225,7 +225,7 @@ class Dynamo(Server):
         self.logger.info(f"Received gossip message: {message}")
         if message.get("type") == "prompt":
             hash_ring_received = HashRing.from_dict(message.get("data"))
-            if self.is_greater_vtime(hash_ring_received.v_time, self.ring.v_time):
+            if not self.is_greater_eq_vtime(self.ring.v_time, hash_ring_received.v_time):
                 self.update_for_gossip(hash_ring_received)
                 self.send_message({"source": self.name, "destination": message["source"], "channel": "gossip", "type": "reply", "text": "gossip received", "id": message.get("id"), "role": "server", "data": {}})
             else:
