@@ -6,6 +6,7 @@ from message import JsonMessage
 from buffer import Buffer
 from abc import abstractmethod
 import logging
+import time
 
 class Server():
     def __init__(self, name: str, host: str = '0.0.0.0', port: int = 5000,network_id:int=0) -> None:
@@ -24,7 +25,7 @@ class Server():
         
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.INFO)
-        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s - %(created)f')
         
         file_handler = logging.FileHandler(f"{name}.log")
         file_handler.setFormatter(formatter)
@@ -34,6 +35,32 @@ class Server():
         self.logger.info(f"Logging started for {name}")  
         
         self.buffer = Buffer(logger=self.logger)
+        
+        self.outgoing: Dict[str, list[Any]] = {}
+        
+        self.locks: Dict[str, threading.Lock] = {}
+        
+    def handle_outgoing(self) -> None:
+        while self.running:
+            for server_name, messages in self.outgoing.items():
+                if len(messages) == 0:
+                    continue
+                threading.Thread(target=self.send, args=(server_name,), daemon=True).start()
+            time.sleep(0.1)
+            
+    def send(self, server_name: str) -> None:
+        
+        self.locks[server_name].acquire()
+        messages = self.outgoing[server_name]
+        self.outgoing[server_name] = []
+        
+        self.locks[server_name].release()
+        
+        msg=JsonMessage(messages)
+        messages=msg.split(1024)
+        for indx in messages:
+            self.request_channels[server_name].sendall(indx)
+            
 
     def generate_message_id(self) -> str:
         """Generates a random message ID."""
@@ -67,6 +94,7 @@ class Server():
         self.running = True
         self.logger.info(f"Server {self.name} started on {self.host}:{self.port}")
         threading.Thread(target=self._accept_connections, daemon=True).start()
+        threading.Thread(target=self.handle_outgoing, daemon=True).start()
 
     def _accept_connections(self) -> None:
         """Accepts incoming connections."""
@@ -88,7 +116,7 @@ class Server():
                 channel_type = message.get("channel")
                 server_name = message.get("source")
                 role = message.get("role")
-
+                self.locks[server_name] = threading.Lock()
                 ack_message = JsonMessage({"source": self.name, "channel": channel_type, "destination": server_name, "type": "notification", "role": "server"})
                 if role == "client":
                     assert channel_type == "request", "Client must connect on request channel."
@@ -123,15 +151,16 @@ class Server():
                 if data:
                     complete=self.buffer.store_data(data)
                     if complete[0]:
-                        message=JsonMessage.reassemble(complete[1])
+                        messages=JsonMessage.reassemble(complete[1])
                     else:
                         continue
-                    type = message.get("type")
-                    if type == "reply":
-                        self.buffer.add(message)
-                    else:
-                        request_thread = threading.Thread(target=self.handle_request, args=(message,), daemon=True)
-                        request_thread.start()
+                    for message in messages:
+                        type = message.get("type")
+                        if type == "reply":
+                            self.buffer.add(message)
+                        else:
+                            request_thread = threading.Thread(target=self.handle_request, args=(message,), daemon=True)
+                            request_thread.start()
             except Exception as e:
                 self.logger.critical(f"Error handling request channel: {e}")
             
@@ -209,6 +238,8 @@ class Server():
             self.gossip_channels[remote_server_name] = temp_channels["gossip"]
             self.transfer_channels[remote_server_name] = temp_channels["transfer"]
             
+            self.locks[remote_server_name] = threading.Lock()
+            
             # Start threads to handle incoming messages
             request_thread = threading.Thread(target=self._handle_request_channel, args=(temp_channels["request"],), daemon=True)
             request_thread.start()
@@ -254,17 +285,25 @@ class Server():
             return
 
         try:
-            socket_conn = channels[server_name]
-            msg = JsonMessage(message)
-            messages=msg.split(1024)
-            for indx in messages:
-                socket_conn.sendall(indx)                
+            if channel == "request":
+                self.locks[server_name].acquire()
+                if server_name not in self.outgoing:
+                    self.outgoing[server_name] = [message]
+                else:
+                    self.outgoing[server_name].append(message)
+                self.locks[server_name].release()
+            else:
+                socket_conn = channels[server_name]
+                msg = JsonMessage(message)
+                messages=msg.split(1024)
+                for indx in messages:
+                    socket_conn.sendall(indx)                
             self.logger.info(f"Sent {message} to {server_name} on {channel} channel.")
         except Exception as e:
             self.logger.critical(f"Failed to send message to {server_name} on {channel} channel: {e}")
             
         if type == "prompt":
-            reply=self.buffer.wait_on(msg["id"], timeout=2)
+            reply=self.buffer.wait_on(message["id"], timeout=1)
 
             if reply:
                 self.logger.info(f"Reply received: {reply}")
