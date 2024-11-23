@@ -10,12 +10,11 @@ R = 2
 W = 2
 
 class HashRing:
-    def __init__(self, server: str, host: str, port: int, ring = None, vtime = None, network = None, preference_list = None, vnodes = 3):
+    def __init__(self, server: str, host: str, port: int, ring = None, vtime = None, network = None, vnodes = 3):
         self.ring = ring or {}   # key: server name , value: list of tuples of range of hash values
         self.vnodes = vnodes
         self.network = network or {} # key: server name, value: tuple of host and port
         self.v_time = vtime or {}
-        self.preference_list = preference_list or {}
         self.add_node(server, host, port)
 
     def add_node(self, server: str, host, port):
