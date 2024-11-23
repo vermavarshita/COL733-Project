@@ -6,39 +6,43 @@ import threading
 import random
 import time
 
+R = 2
+W = 2
+
 class HashRing:
-    def __init__(self, server: str, host: str, port: int, ring = None, vtime = None, network = None, vnodes = 4):
+    def __init__(self, server: str, host: str, port: int, ring = None, vtime = None, network = None, preference_list = None, vnodes = 3):
         self.ring = ring or {}   # key: server name , value: list of tuples of range of hash values
         self.vnodes = vnodes
         self.network = network or {} # key: server name, value: tuple of host and port
         self.v_time = vtime or {}
-        self.add_node(server, host, port, vnodes)
+        self.preference_list = preference_list or {}
+        self.add_node(server, host, port)
 
-    def add_node(self, server: str, host, port, vnodes:int = 4):
+    def add_node(self, server: str, host, port):
         if server in self.ring:
             return
         self.v_time[server] = 1
-        self.network[server] = (host, port)
+        self.network[server] = [host, port]
         if self.ring:
             self.ring[server] = []
             segments = self.get_all_segments()
             segments.sort(key=lambda x: x[0], reverse=True)
-            for i in range(vnodes):
+            for i in range(self.vnodes):
                 segment = segments.pop(0)
                 revised_keys = [segment[1][0], (segment[1][1]+segment[1][0]-1)//2]
                 added_keys = [(segment[1][1]+segment[1][0]+1)//2, segment[1][1]]
                 self.ring[server].append(added_keys)
                 self.ring[segment[2]].remove(segment[1])
                 self.ring[segment[2]].append(revised_keys)
-                sorted(self.ring[segment[2]], key=lambda x: x[0])
+                self.ring[segment[2]].sort(key=lambda x: x[0])
                 # here, also need to ensure that it receives the data for the keys in its storage range
                 # This is JUST KEY ALLCOATION, not data transfer
         else:
-            # first node is added with vnodes and hash range of 0 to 2^64, divide this range into vnode parts
-            #256 bits was getting too big, and was causing problems
+            # first node is added with vnodes and hash range of 0 to 2^32, divide this range into vnode parts
+            # 256 bits was getting too big, and was causing problems
             self.ring[server] = []
-            for i in range(vnodes):
-                self.ring[server].append([i*(2**32)//vnodes, ((i+1)*(2**32)//vnodes)-1])
+            for i in range(self.vnodes):
+                self.ring[server].append([i*(2**32)//self.vnodes, ((i+1)*(2**32)//self.vnodes)-1])
             
     def get_all_segments(self):
         segments = []
@@ -47,29 +51,49 @@ class HashRing:
                 segments.append([value[i][1]-value[i][0], value[i], key])
         return segments
 
-    def remove_node(self, server:str, vnodes:int = 4):
+    def remove_node(self, server:str):
         if server not in self.ring:
             return
-        all_segments = self.get_all_segments()
-        del self.v_time[server]
+        # all_segments = self.get_all_segments()
+        self.v_time[server] += 1
         del self.network[server]
-        for i in range(vnodes):
+        for i in range(self.vnodes):
             segment = self.ring[server].pop(0)
-            for j in range(len(all_segments)):
-                if all_segments[j][1][0] == segment[1]+1:
-                    up = all_segments.pop(j)
-                if all_segments[j][1][1] == segment[0]-1:
-                    down = all_segments.pop(j)
-            if up[0] >= down[0]:
-                revised_keys = [down[1][0], segment[1]]
-                self.ring[down[2]].remove(down[1])
-                self.ring[down[2]].append(revised_keys)
-                sorted(self.ring[down[2]], key=lambda x: x[0])
-            else:
-                revised_keys = [segment[0], up[1][1]]
-                self.ring[up[2]].remove(up[1])
-                self.ring[up[2]].append(revised_keys)
-                sorted(self.ring[up[2]], key=lambda x: x[0])
+            down_node = self.get_node(segment[0]-1)
+            down = None
+            up_node = self.get_node(segment[1]+1)
+            up = None
+            if down_node:
+                for keys in self.ring[down_node]:
+                    if keys[1] == segment[0]-1:
+                        down = keys
+                        break
+            if up_node:
+                for keys in self.ring[up_node]:
+                    if keys[0] == segment[1]+1:
+                        up = keys
+                        break
+            if up and down:
+                if int(up[1])-int(up[0]) >= int(down[1])-int(down[0]):
+                    revised_keys = [down[0], segment[1]]
+                    self.ring[down_node].remove(down)
+                    self.ring[down_node].append(revised_keys)
+                    self.ring[down_node].sort(key=lambda x: x[0])
+                else:
+                    revised_keys = [segment[0], up[1]]
+                    self.ring[up_node].remove(up)
+                    self.ring[up_node].append(revised_keys)
+                    self.ring[up_node].sort(key=lambda x: x[0])
+            elif up:
+                revised_keys = [segment[0], up[1]]
+                self.ring[up_node].remove(up)
+                self.ring[up_node].append(revised_keys)
+                self.ring[up_node].sort(key=lambda x: x[0])
+            elif down:
+                revised_keys = [down[0], segment[1]]
+                self.ring[down_node].remove(down)
+                self.ring[down_node].append(revised_keys)
+                self.ring[down_node].sort(key=lambda x: x[0])
         # here, also need to ensure that it receives the data for the keys in its storage range
         # This is JUST KEY ALLCOATION, not data transfer
         del self.ring[server]
@@ -148,15 +172,28 @@ class Dynamo(Server):
     def handle_transfer(self, message: Dict[str, Any]) -> None:
         """Handles a transfer message."""
         self.logger.info(f"Received transfer message: {message}")
+
         if message.get("type") == "prompt":
             if message["text"] == "seed_connect":
                 self.send_message({"source": self.name, "destination": message["source"], "channel": "transfer", "type": "reply", "text": "seed_connect", "role": "server", "id": message.get("id"), "data": self.ring.to_dict()})
             elif message["text"] == "get_data":
-                data = self.send_data(message["data"][0])
+                data = self.send_data(message["data"][0], self.data)
                 for key in data:
                     self.data.pop(key)
                 self.ring = HashRing.from_dict(message["data"][1])
                 self.send_message({"source": self.name, "destination": message["source"], "channel": "transfer", "type": "reply", "text": "get_data", "role": "server", "id": message.get("id"), "data": data})
+
+        if message.get("type") == "notification":
+            if message["text"] == "remove_node":
+                ring = copy.deepcopy(self.ring.ring)
+                self.ring.remove_node(message["source"])
+                for key1, key2 in ring[message["source"]]:
+                    node = self.ring.get_node(key1)
+                    data = self.send_data([key1, key2], message["data"])
+                    reply = self.send_message({"source": self.name, "destination": node, "channel": "transfer", "type": "notification", "text": "update_data", "role": "server", "data": (data, self.ring.to_dict())})
+            elif message["text"] == "update_data":
+                self.ring = HashRing.from_dict(message["data"][1])
+                self.data.update(message["data"][0])
         pass
 
     def handle_request(self, message: Dict[str, Any]) -> None:
@@ -165,38 +202,41 @@ class Dynamo(Server):
         if message.get("type") == "prompt":
             key = self.hash_calc(str(message.get("key")))
             node = self.ring.get_node(int(key))
+            # print(key,"key")
+            # print(self.ring.to_dict())
+            # print(node,"node")
+            # print(message,"message")
             if node == self.name:
                 if message.get("text") == "put":
-                    self.connect_to_server
                     self.put_data(key, message.get("data"))
                     reply = {"source": self.name, "destination": message.get("source"), "channel": "request", "type": "reply", "text": "Data received", "id": message.get("id"), "role": "server"}
                     self.send_message(reply)
                 elif message.get("text") == "get":
                     self.logger.info(f"Data: {self.data.get(key)}")
-                    data = self.send_data([int(key), int(key)])
+                    data = self.send_data([int(key), int(key)], self.data)
                     reply = {"source": self.name, "destination": message.get("source"), "channel": "request", "type": "reply", "text": "Data received", "id": message.get("id"), "role": "server", "data": data}
                     self.send_message(reply)
             else:
                 original_source = copy.deepcopy(message.get("source"))
                 original_id = copy.deepcopy(message.get("id"))
-                message.set("source", self.name)
-                message.set("destination", node)
+                message["source"] = self.name
+                message["destination"] = node
                 message.pop("id")
                 # print(message, "message")
-                reply = self.send_message(message._msg_d)
+                reply = self.send_message(message)
                 self.logger.info(f"Received reply message: {reply}")
                 if reply["text"] == "Data received":
-                    reply.set("source", self.name)
-                    reply.set("destination", original_source)
-                    reply.set("id", original_id)
-                    self.send_message(reply._msg_d)
+                    reply["source"] = self.name
+                    reply["destination"] = original_source
+                    reply["id"] = original_id
+                    self.send_message(reply)
         pass
 
-    def send_data(self, keys):
+    def send_data(self, keys, data_dict):
         data = {}
         key_min, key_max = keys
         # print(self.name)
-        for key, val in self.data.items():
+        for key, val in data_dict.items():
             # print(key, key_min, key_max)
             if int(key) >= key_min and int(key) <= key_max:
                 data[key] = val
@@ -205,11 +245,23 @@ class Dynamo(Server):
         return data
     
     def hash_calc(self, data):
-        return str(int.from_bytes(hashlib.sha512(data.encode('utf-8')).digest()[:16], 'big'))
+        return str(int.from_bytes(hashlib.sha512(data.encode('utf-8')).digest()[:4], 'big'))
     
     def put_data(self, key, data):
         self.data[key] = data
     
+    def stop(self):
+        """Stops the server and closes all connections."""
+        super().stop()
+        if self.seed:
+            self.send_message({"source": self.name, "destination": self.seed["name"], "channel": "transfer", "type": "notification", "text": "remove_node", "data": self.data})
+        self.running = False
+        self.server_socket.close()
+        for channel_dict in [self.request_channels, self.gossip_channels, self.transfer_channels]:
+            for conn in channel_dict.values():
+                conn.close()
+        self.logger.info(f"Server {self.name} stopped.")
+
     # Adding the Gossip Protocol to the Dynamo class
 
     # - don't need to transfer data within gossip, as we do that as and when a new node joins, or an existing node leaves
@@ -241,23 +293,24 @@ class Dynamo(Server):
         """Periodically sends gossip messages to random servers."""
         while self.running:
             try:
-                random_server = random.choice(list(self.transfer_channels.keys()))
-                gossip_msg = {
-                    "source": self.name,
-                    "destination": random_server,
-                    "channel": "gossip",
-                    "type": "prompt",
-                    "role": "server",
-                    "text": "gossip initiated",
-                    "data": self.ring.to_dict()
-                }
-                reply = self.send_message(gossip_msg)
+                if self.gossip_channels.keys():
+                    random_server = random.choice(list(self.gossip_channels.keys()))
+                    gossip_msg = {
+                        "source": self.name,
+                        "destination": random_server,
+                        "channel": "gossip",
+                        "type": "prompt",
+                        "role": "server",
+                        "text": "gossip initiated",
+                        "data": self.ring.to_dict()
+                    }
+                    reply = self.send_message(gossip_msg)
 
-                if reply.get("text") == "gossip received" and reply.get("data"):
-                    self.logger.info(f"Gossip successful with server {random_server}")
-                    self.update_for_gossip(reply.get(HashRing.from_dict(reply.get("data"))))
-                elif reply.get("text") == "gossip received":
-                    self.logger.info(f"Gossip successful with server {random_server}")
+                    if reply.get("text") == "gossip received" and reply.get("data"):
+                        self.logger.info(f"Gossip successful with server {random_server}")
+                        self.update_for_gossip(HashRing.from_dict(reply.get("data")))
+                    elif reply.get("text") == "gossip received":
+                        self.logger.info(f"Gossip successful with server {random_server}")
                 
             except Exception as e:
                 self.logger.error(f"Gossip error with server: {e}")
