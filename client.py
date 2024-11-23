@@ -2,9 +2,10 @@ import socket
 import uuid
 import logging
 from message import JsonMessage
-from typing import Dict
+from typing import Dict, Optional
 from buffer import Buffer
 import threading
+import time
 
 class Client:
     def __init__(self, name: str, host: str, port: int) -> None:
@@ -26,9 +27,27 @@ class Client:
         self.buffer = Buffer(logger=self.logger)
         
         self.incoming=0
-        self.source=None
+        self.outgoing=[]
+        
+        threading.Thread(target=self.handle_outgoing, daemon=True).start()
         
         self.connect()
+        
+    def handle_outgoing(self) -> None:
+        while True:
+            if len(self.outgoing)>0:
+                
+                self.lock.acquire()
+                messages = self.outgoing
+                self.outgoing = []
+                self.lock.release()
+                
+                msg=JsonMessage(messages)
+                messages=msg.split(1024)
+                for indx in messages:
+                    self.client_socket.sendall(indx)
+                        
+            time.sleep(0.1)
 
     def generate_message_id(self) -> str:
         """Generates a random message ID."""
@@ -46,6 +65,7 @@ class Client:
                 "role": "client"
             })
             self.client_socket.sendall(init_message.serialize())
+            self.lock=threading.Lock()
 
             # Wait for acknowledgment
             ack_data = self.client_socket.recv(1024)
@@ -61,7 +81,7 @@ class Client:
         except Exception as e:
             self.logger.error(f"Failed to connect to server {self.host}:{self.port}: {e}")
 
-    def send_prompt(self, message_text: Dict[str,str]) -> None:
+    def send_prompt(self, message_text: Dict[str,str]) -> Optional[Dict[str,str]]:
         """Sends a prompt message to the server."""
         try:
             message = {
@@ -72,17 +92,19 @@ class Client:
                 "id": self.generate_message_id()
             }
             message.update(message_text)
-            msg = JsonMessage(message)
             self.incoming+=1
             if self.incoming==1:
                 reply_thread = threading.Thread(target=self.receive_reply)
                 reply_thread.start()
-            self.client_socket.sendall(msg.serialize())
+            self.lock.acquire()
+            self.outgoing.append(message)
+            self.lock.release()
             self.logger.info(f"Sent prompt to server: {message}")
             reply=self.buffer.wait_on(message["id"],timeout=5)
             return reply            
         except Exception as e:
             self.logger.error(f"Failed to send prompt: {e}")
+            return None
 
     def receive_reply(self) -> None:
         """Receives a reply to the prompt."""
@@ -91,14 +113,19 @@ class Client:
             try:
                 data = self.client_socket.recv(1024)
                 if data:
-                    message = JsonMessage.deserialize(data)
-                    if message.get("type") == "reply":
-                        self.logger.info(f"Received reply from server: {message}")
-                        self.buffer.add(message)
+                    complete=self.buffer.store_data(data)
+                    if complete[0]:
+                        messages=JsonMessage.reassemble(complete[1])
                     else:
-                        self.logger.critical("Received unexpected message type.")
-                    self.incoming-=1
-                    self.logger.info(f"Remaining incoming messages: {self.incoming}")
+                        continue
+                    for message in messages:
+                        if message.get("type") == "reply":
+                            self.logger.info(f"Received reply from server: {message}")
+                            self.buffer.add(message)
+                        else:
+                            self.logger.critical("Received unexpected message type.")
+                        self.incoming-=1
+                        self.logger.info(f"Remaining incoming messages: {self.incoming}")
                 else:
                     self.logger.critical("No reply received.")
             except Exception as e:
