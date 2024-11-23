@@ -4,11 +4,11 @@ import uuid
 from typing import Dict, Any
 from message import JsonMessage
 from buffer import Buffer
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 import logging
 
-class Server(ABC):
-    def __init__(self, name: str, host: str = '0.0.0.0', port: int = 5000) -> None:
+class Server():
+    def __init__(self, name: str, host: str = '0.0.0.0', port: int = 5000,network_id:int=0) -> None:
         self.name: str = name
         self.host: str = host
         self.port: int = port
@@ -18,7 +18,9 @@ class Server(ABC):
         # Connection dictionaries
         self.request_channels: Dict[str, socket.socket] = {}
         self.gossip_channels: Dict[str, socket.socket] = {}
-        self.transfer_channels: Dict[str, socket.socket] = {}     
+        self.transfer_channels: Dict[str, socket.socket] = {}    
+        
+        self.network_id=network_id 
         
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.INFO)
@@ -37,20 +39,26 @@ class Server(ABC):
         """Generates a random message ID."""
         return str(uuid.uuid4())
 
-    @abstractmethod
     def handle_request(self, message: Dict[str, Any]) -> None:
         """Handles a transfer message."""
-        pass
+        self.logger.info(f"Received request message: {message}")
+        if message.get("type") == "prompt":
+            reply = {"source": self.name, "destination": message.get("source"), "channel": "request", "type": "reply", "text": f"Hello on request channel. You sent a message of length {len(message['data'])}", "id": message.get("id"), "role": "server"}
+            self.send_message(reply)
 
-    @abstractmethod
     def handle_gossip(self, message: Dict[str, Any]) -> None:
         """Handles a gossip message."""
-        pass
+        self.logger.info(f"Received gossip message: {message}")
+        if message.get("type") == "prompt":
+            reply = {"source": self.name, "destination": message.get("source"), "channel": "gossip", "type": "reply", "text": f"Hello on request channel. You sent a message of length {len(message['data'])}", "id": message.get("id"), "role": "server"}
+            self.send_message(reply)
 
-    @abstractmethod
     def handle_transfer(self, message: Dict[str, Any]) -> None:
         """Handles a transfer message."""
-        pass
+        self.logger.info(f"Received transfer message: {message}")
+        if message.get("type") == "prompt":
+            reply = {"source": self.name, "destination": message.get("source"), "channel": "transfer", "type": "reply", "text": f"Hello on request channel. You sent a message of length {len(message['data'])}", "id": message.get("id"), "role": "server"}
+            self.send_message(reply)
 
     def start(self) -> None:
         """Starts the server and listens for incoming connections."""
@@ -113,7 +121,11 @@ class Server(ABC):
             try:
                 data = client_socket.recv(1024)
                 if data:
-                    message = JsonMessage.deserialize(data)
+                    complete=self.buffer.store_data(data)
+                    if complete[0]:
+                        message=JsonMessage.reassemble(complete[1])
+                    else:
+                        continue
                     type = message.get("type")
                     if type == "reply":
                         self.buffer.add(message)
@@ -129,7 +141,11 @@ class Server(ABC):
             try:
                 data = client_socket.recv(1024)
                 if data:
-                    message = JsonMessage.deserialize(data)
+                    complete=self.buffer.store_data(data)
+                    if complete[0]:
+                        message=JsonMessage.reassemble(complete[1])
+                    else:
+                        continue
                     type = message.get("type")
                     if type == "reply":
                         self.buffer.add(message)
@@ -145,7 +161,11 @@ class Server(ABC):
             try:
                 data = client_socket.recv(1024)
                 if data:
-                    message = JsonMessage.deserialize(data)
+                    complete=self.buffer.store_data(data)
+                    if complete[0]:
+                        message=JsonMessage.reassemble(complete[1])
+                    else:
+                        continue
                     if message.get("type") == "reply":
                         self.buffer.add(message)
                     else:
@@ -236,13 +256,15 @@ class Server(ABC):
         try:
             socket_conn = channels[server_name]
             msg = JsonMessage(message)
-            socket_conn.sendall(msg.serialize())
+            messages=msg.split(1024)
+            for indx in messages:
+                socket_conn.sendall(indx)                
             self.logger.info(f"Sent {message} to {server_name} on {channel} channel.")
         except Exception as e:
             self.logger.critical(f"Failed to send message to {server_name} on {channel} channel: {e}")
             
         if type == "prompt":
-            reply=self.buffer.wait_on(message["id"], timeout=20)
+            reply=self.buffer.wait_on(msg["id"], timeout=2)
 
             if reply:
                 self.logger.info(f"Reply received: {reply}")
