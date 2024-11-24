@@ -1,47 +1,66 @@
-from cryptography.hazmat.primitives.asymmetric import padding
-from cryptography.hazmat.primitives import hashes, hmac, serialization
+from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 from cryptography.hazmat.backends import default_backend
-from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateNumbers, RSAPublicNumbers
+from cryptography.hazmat.primitives.asymmetric import ec
 import os
 import base64
 import pickle
-import hashlib
-from sympy import isprime
+import logging
 
 class EncryptionNode:
-    def __init__(self, username, password):
+    def __init__(self, username, password,logger=None):
         self.username = username
-        self.password = password.encode()
-
-        # Generate deterministic symmetric key
-        self.my_key = self._derive_symmetric_key()
+        self.password = password
 
         # Generate deterministic private/public key pair
         self.private_key, self.public_key = self._derive_key_pair()
 
-        # Generate deterministic signature
-        self.signature = self._derive_signature()
-
         # Connections storage
         self.connections = {}
+        
+        self.logger = logger or logging.getLogger(__name__)
 
-    def _derive_symmetric_key(self):
-        """Derive a symmetric key deterministically from username and password."""
-        salt = hashlib.sha256(self.username.encode()).digest()  # Use username as salt
-        kdf = PBKDF2HMAC(
-            algorithm=hashes.SHA256(),
-            length=32,
-            salt=salt,
-            iterations=100_000,
-            backend=default_backend()
+    # Serialize the public key to PEM format and return as base64 (optional)
+    def serialize_key(self,public_key):
+        """
+        Serialize an ECPublicKey object to a base64-encoded PEM string.
+        
+        :param public_key: The public key (ECPublicKey) to serialize.
+        :return: A base64 encoded string of the public key in PEM format.
+        """
+        # Serialize the public key to PEM format
+        pem_public_key = public_key.public_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PublicFormat.SubjectPublicKeyInfo
         )
-        return kdf.derive(self.password)
+
+        # Convert PEM to base64 encoding
+        base64_public_key = base64.b64encode(pem_public_key).decode('utf-8')
+        
+        return base64_public_key
+
+
+    # Deserialize a base64 encoded PEM string back to an ECPublicKey object
+    def deserialize_key(self,base64_public_key):
+        """
+        Deserialize a base64-encoded PEM string back to an ECPublicKey object.
+        
+        :param base64_public_key: A base64 encoded string of the public key in PEM format.
+        :return: The deserialized ECPublicKey object.
+        """
+        # Decode the base64 string to get the PEM data
+        pem_data = base64.b64decode(base64_public_key)
+
+        # Deserialize the PEM data to an ECPublicKey object
+        public_key = serialization.load_pem_public_key(pem_data)
+
+        return public_key
+
 
     def _derive_key_pair(self):
-        """Derive a deterministic RSA key pair using HKDF and the username/password."""
+        """Derive a deterministic ECC key pair using HKDF and the username/password."""
         # Derive a deterministic seed from the username and password
         salt = b"key_pair_generation_salt"  # Fixed salt for key pair derivation
         hkdf = HKDF(
@@ -50,138 +69,293 @@ class EncryptionNode:
             salt=salt,
             info=b"key_pair_seed",
         )
-        seed = hkdf.derive(self.username.encode() + self.password)  # Combine username and password
+        seed = hkdf.derive(self.username.encode() + self.password.encode())  # Combine username and password
 
-        # Convert seed into an integer
-        seed_int = int.from_bytes(seed, "big")
+        # Use the derived seed as a deterministic private key
+        private_key = ec.derive_private_key(int.from_bytes(seed, "big"), ec.SECP256K1())
 
+        # Generate the corresponding public key
+        public_key = private_key.public_key()
 
-        def _generate_prime(seed, bits):
-            state = seed
-            while True:
-                # Generate a candidate prime number deterministically
-                state = int(hashlib.sha256(state.to_bytes((state.bit_length() + 7) // 8, "big")).hexdigest(), 16)
-                candidate = state | (1 << (bits - 1)) | 1  # Ensure candidate is odd and has the required bit length
-                if isprime(candidate):  # Use SymPy's isprime
-                    return candidate
+        return private_key, public_key
 
+    def initialize_connection(self):
+        """
+        Initializes a secure connection by generating a private key and returning the public key
+        for use in the key exchange with another party.
+        
+        Returns:
+            ec.EllipticCurvePublicKey: The public key for the other party to use in key exchange.
+        """
+        # Generate the private key for the connection
+        private_key = ec.generate_private_key(ec.SECP256R1())  # SECP256R1 is commonly used curve
+        public_key = private_key.public_key()
 
-        # Deterministically generate the RSA primes p and q
-        p = _generate_prime(seed_int, 1024)
-        q = _generate_prime(seed_int + 1, 1024)  # Ensure q is different from p
+        self.logger.info(f"Connection initialized. Public key generated.")
 
-        # Compute RSA key parameters
-        n = p * q
-        phi = (p - 1) * (q - 1)
-        e = 65537  # Standard public exponent
-        d = pow(e, -1, phi)  # Compute modular inverse of e
+        return private_key, public_key
+    
+    def complete_connection(self, other_public_key,other_name,connection_private_key):
+        """
+        Completes the secure connection by performing the key exchange with the other party's public key.
+        
+        Args:
+            other_public_key (ec.EllipticCurvePublicKey): The public key of the other party.
+        
+        Returns:
+            bytes: The derived shared key used for encryption.
+        """
+        # Perform the key exchange to compute the shared secret
+        shared_secret = connection_private_key.exchange(ec.ECDH(), other_public_key)
 
-        # Construct the RSA private key
-        private_numbers = RSAPrivateNumbers(
-            p=p,
-            q=q,
-            d=d,
-            dmp1=d % (p - 1),
-            dmq1=d % (q - 1),
-            iqmp=pow(q, -1, p),
-            public_numbers=RSAPublicNumbers(e=e, n=n),
+        # Derive a shared encryption key using HKDF
+        shared_key = HKDF(
+            algorithm=hashes.SHA256(),
+            length=32,  # AES-256 requires a 256-bit key
+            salt=None,  # Optional salt; could be pre-shared or fixed
+            info=b"handshake data",  # Contextual info to prevent key reuse
+        ).derive(shared_secret)
+
+        # Store the shared key and the public key of the other party
+        self.connections[other_name] = {"shared_key": shared_key, "public_key": other_public_key,"private_key":connection_private_key}
+        self.logger.info(f"Secure connection completed with {other_name}.")
+
+    def encrypt_for_connection(self, recipient, data: bytes):
+        """
+        Encrypt data for a specific recipient using the shared key for that connection.
+
+        Args:
+            recipient (str): The recipient's name to identify the connection.
+            data (str): The plaintext data to encrypt.
+
+        Returns:
+            str: The encrypted data, encoded in base64.
+        """
+        shared_key = self.connections[recipient]["shared_key"]
+        private_key = self.connections[recipient]["private_key"]
+
+        # Sign the data using the private ECC key
+        signature = private_key.sign(
+            data,
+            ec.ECDSA(hashes.SHA256())
         )
-        private_key = private_numbers.private_key()
 
-        return private_key, private_key.public_key()
-
-    def _derive_signature(self):
-        """Derive a deterministic signature."""
-        h = hmac.HMAC(self.my_key, hashes.SHA256(), backend=default_backend())
-        h.update(self.username.encode())
-        return h.finalize()
-
-    def server_connect(self, server_name):
-        """Set up a connection with the encryption node on the server."""
-        shared_key = os.urandom(32)  # Generate a shared encryption key
-        server_signature = os.urandom(16)  # Example signature
-        self.connections[server_name] = {"shared_key": shared_key, "signature": server_signature}
-        print(f"Connected to server {server_name}.")
-
-    def exchange_keys(self, target_client, target_public_key):
-        """Securely exchange public key and signature with another client."""
-        # Placeholder for key exchange logic
-        self.connections[target_client] = {"shared_key": os.urandom(32)}  # Example key exchange
-        print(f"Exchanged keys with {target_client}.")
-
-    def encrypt_message_with_shared_key(self, recipient, data):
-        """Encrypt a message using a shared key with a recipient."""
-        shared_key = self.connections.get(recipient, {}).get("shared_key")
-        if not shared_key:
-            raise ValueError(f"No shared key found for {recipient}.")
+        # Generate a random 16-byte IV for encryption
         iv = os.urandom(16)
-        cipher = Cipher(algorithms.AES(shared_key), modes.CFB(iv))
+
+        # Initialize the AES cipher in CBC mode
+        cipher = Cipher(algorithms.AES(shared_key), modes.CBC(iv), backend=default_backend())
         encryptor = cipher.encryptor()
-        encrypted_data = encryptor.update(data.encode()) + encryptor.finalize()
-        return base64.b64encode(iv + encrypted_data).decode()
+        
+        sig_len = len(signature)
+        #convert sig_len to 2 bytes
+        sig_len = sig_len.to_bytes(2, byteorder='big')
 
-    def decrypt_message_with_shared_key(self, sender, encrypted_data):
-        """Decrypt a message using a shared key with a sender."""
-        shared_key = self.connections.get(sender, {}).get("shared_key")
-        if not shared_key:
-            raise ValueError(f"No shared key found for {sender}.")
-        raw_data = base64.b64decode(encrypted_data)
-        iv, ciphertext = raw_data[:16], raw_data[16:]
-        cipher = Cipher(algorithms.AES(shared_key), modes.CFB(iv))
+        # Combine the data and the signature
+        data_with_signature = data + signature + sig_len
+
+        # Pad the data to make it a multiple of the block size
+        pad_length = 16 - (len(data_with_signature) % 16)
+        padded_data = data_with_signature + bytes([pad_length]) * pad_length
+
+        # Encrypt the padded data
+        encrypted_data = encryptor.update(padded_data) + encryptor.finalize()
+
+        # Return IV + encrypted data as a base64-encoded string
+        return base64.b64encode(iv + encrypted_data)
+
+    def decrypt_from_connection(self, sender, data):
+        """
+        Decrypt data from a specific sender using the shared key for that connection.
+
+        Args:
+            sender (str): The sender's name to identify the connection.
+            data (str): The encrypted data (base64 encoded).
+
+        Returns:
+            str: The decrypted plaintext data.
+        """
+        shared_key = self.connections[sender]["shared_key"]
+        public_key = self.connections[sender]["public_key"]
+
+        # Decode the base64-encoded data
+        encrypted_data = base64.b64decode(data)
+
+        # Extract the IV from the first 16 bytes
+        iv = encrypted_data[:16]
+        encrypted_data = encrypted_data[16:]
+
+        # Initialize the AES cipher in CBC mode
+        cipher = Cipher(algorithms.AES(shared_key), modes.CBC(iv), backend=default_backend())
         decryptor = cipher.decryptor()
-        decrypted_data = decryptor.update(ciphertext) + decryptor.finalize()
-        return decrypted_data.decode()
 
-    def encrypt_with_private_key(self, data):
-        """Encrypt a message using the node's private key."""
-        encrypted = self.public_key.encrypt(
-            data.encode(),
-            padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()), algorithm=hashes.SHA256(), label=None),
-        )
-        return base64.b64encode(encrypted).decode()
+        # Decrypt the data
+        decrypted_data = decryptor.update(encrypted_data) + decryptor.finalize()
 
-    def verify_message(self, message, signature, sender_public_key):
-        """Verify a message signature from another client."""
+        # Remove the padding
+        pad_length = decrypted_data[-1]
+        data_with_signature = decrypted_data[:-pad_length]
+
+        sig_len = int.from_bytes(data_with_signature[-2:], byteorder='big')
+        
+        # Extract the plaintext and the signature
+        signature = data_with_signature[-(sig_len+2):-2]
+        plaintext_data = data_with_signature[:-(sig_len+2)]
+
+        # Verify the signature
         try:
-            sender_public_key.verify(
+            public_key.verify(
                 signature,
-                message.encode(),
-                padding.PSS(mgf=padding.MGF1(hashes.SHA256()), salt_length=padding.PSS.MAX_LENGTH),
-                hashes.SHA256(),
+                plaintext_data,
+                ec.ECDSA(hashes.SHA256())
             )
-            print("Message verified successfully.")
-            return True
-        except InvalidSignature:
-            print("Invalid signature.")
-            return False
+        except Exception:
+            self.logger.CRITICAL("Signature verification failed")
+            return None
+
+        return plaintext_data
+
+
+    def encrypt_with_private_key(self, private_key, public_key, data,sign=True):
+        """
+        Encrypt a message using the recipient's public key and sign the message with the private key.
+
+        :param private_key: The private key object used for signing.
+        :param public_key: The public key object used for encrypting.
+        :param data: The data to encrypt (string).
+        :return: Base64 encoded string of encrypted data.
+        """
+        # Sign the message with the private key using ECDSA (Elliptic Curve Digital Signature Algorithm)
+        if sign:
+            signature = private_key.sign(
+                data,
+                ec.ECDSA(hashes.SHA256())
+            )
+        else:
+            signature = b''
+
+        sig_len = len(signature)
+        sig_len = sig_len.to_bytes(2, byteorder='big')
+        # Append the signature to the data
+        data_with_signature = data + signature + sig_len
+
+        # Encrypt the data with the recipient's public key (using ECIES)
+        shared_key = private_key.exchange(ec.ECDH(), public_key)  # ECDH key exchange
+
+        # Derive a symmetric encryption key from the shared secret
+        encryption_key = HKDF(
+            algorithm=hashes.SHA256(),
+            length=32,
+            salt=None,
+            info=b"encryption_key"
+        ).derive(shared_key)
+
+        # Generate a random nonce for AES encryption
+        nonce = os.urandom(12)  # 12 bytes (96 bits) is a common size for nonce in GCM mode
+
+        # Encrypt the data using the derived symmetric key (AES for encryption) and the generated nonce
+        cipher = Cipher(algorithms.AES(encryption_key), modes.GCM(nonce))
+        encryptor = cipher.encryptor()
+        encrypted_data = encryptor.update(data_with_signature) + encryptor.finalize()
+
+        # Get the authentication tag
+        tag = encryptor.tag
+
+        # Return base64 encoded encrypted data (including nonce and tag at the beginning)
+        return base64.b64encode(nonce + tag + encrypted_data)
+
+
+    def decrypt_with_private_key(self, private_key, public_key, encrypted_data_b64):
+        """
+        Decrypt the message using the recipient's private key and verify the signature.
+
+        :param private_key: The private key object used for decryption.
+        :param public_key: The public key object used for verification.
+        :param encrypted_data_b64: The base64 encoded encrypted data (including nonce and tag).
+        :return: Decrypted message (string).
+        """
+        # Decode the base64 encoded encrypted data
+        encrypted_data = base64.b64decode(encrypted_data_b64)
+
+        # Extract the nonce (first 12 bytes), tag (next 16 bytes), and encrypted message
+        nonce = encrypted_data[:12]
+        tag = encrypted_data[12:28]  # 16 bytes for the tag
+        encrypted_message = encrypted_data[28:]
+
+        # Decrypt the data using the derived symmetric key and the nonce
+        shared_key = private_key.exchange(ec.ECDH(), public_key)  # ECDH key exchange
+        encryption_key = HKDF(
+            algorithm=hashes.SHA256(),
+            length=32,
+            salt=None,
+            info=b"encryption_key"
+        ).derive(shared_key)
+
+        cipher = Cipher(algorithms.AES(encryption_key), modes.GCM(nonce, tag))
+        decryptor = cipher.decryptor()
+        decrypted_data = decryptor.update(encrypted_message) + decryptor.finalize()
+        
+        sig_len = int.from_bytes(decrypted_data[-2:], byteorder='big')
+        
+        # Extract the plaintext and the signature
+        signature = decrypted_data[-(sig_len+2):-2]
+        data = decrypted_data[:-(sig_len+2)]
+
+        # Verify the signature (optional but recommended)
+        try:
+            if sig_len > 0:
+                public_key.verify(signature, data, ec.ECDSA(hashes.SHA256()))
+            # Return the decrypted message
+            return data
+        except Exception:
+            self.logger.CRITICAL("Signature verification failed")
+            return None
+
+    def generate_ecc_private_key_from_hash_and_private_key(hash_value, existing_private_key):
+        """
+        Generate a deterministic ECC private key from a given SHA256 hash
+        and an existing private key.
+
+        :param hash_value: The SHA256 hash as bytes (length must be 32 bytes).
+        :param existing_private_key: The existing ECC private key (used as part of the derivation process).
+        :return: The generated ECC private key.
+        """
+        if len(hash_value) != 32:
+            raise ValueError("Hash must be a 32-byte SHA256 hash.")
+        
+        # Derive some shared secret from the existing private key
+        shared_secret = existing_private_key.private_numbers().private_value.to_bytes(32, "big")
+        
+        # Combine the shared secret and hash to create a new key seed
+        combined_data = shared_secret + hash_value
+
+        # Use a KDF to stretch the combined data to a suitable seed for ECC key generation
+        kdf = PBKDF2HMAC(
+            algorithm=hashes.SHA256(),
+            length=32,  # Length of derived key material
+            salt=b"deterministic-salt",
+            iterations=100000,
+            backend=default_backend()
+        )
+        seed = kdf.derive(combined_data)
+
+        # Convert the seed to an integer and create an ECC private key from it
+        private_key = ec.derive_private_key(seed, ec.SECP256R1(), default_backend())
+
+        return private_key
+
 
     def save(self, filename):
         """Save the node's state to a file."""
         with open(filename, 'wb') as f:
             pickle.dump({
-                'username': self.username,
-                'private_key': self.private_key.private_bytes(
-                    encoding=serialization.Encoding.PEM,
-                    format=serialization.PrivateFormat.PKCS8,
-                    encryption_algorithm=serialization.NoEncryption(),
-                ),
-                'public_key': self.public_key.public_bytes(
-                    encoding=serialization.Encoding.PEM,
-                    format=serialization.PublicFormat.SubjectPublicKeyInfo,
-                ),
-                'signature': self.signature,
                 'connections': self.connections,
             }, f)
-        print(f"Node saved to {filename}.")
+        self.logger.info(f"Node saved to {filename}.")
 
-    @classmethod
-    def restore(cls, filename):
+    def restore(self, filename):
         """Restore the node's state from a file."""
         with open(filename, 'rb') as f:
             data = pickle.load(f)
-        private_key = serialization.load_pem_private_key(data['private_key'], password=None)
-        public_key = serialization.load_pem_public_key(data['public_key'])
-        node = cls(username=data['username'], private_key=private_key, public_key=public_key, signature=data['signature'])
-        node.connections = data['connections']
-        print(f"Node restored from {filename}.")
-        return node
+        self.connections = data['connections']
+        self.logger.info(f"Node restored from {filename}.")

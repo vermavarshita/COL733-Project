@@ -58,7 +58,7 @@ class JsonMessage:
     def pop(self, key: str) -> Optional[Any]:
         return self._msg_d.pop(key)
     
-    def split(self, size: int = 1024) -> list[bytes]:
+    def split(self, size: int = 1024, encryption : function = lambda x: x) -> list[bytes]:
         """
         Splits the message into chunks of specified size.
 
@@ -66,7 +66,7 @@ class JsonMessage:
         :return: List of serialized message chunks.
         """
         messages = []
-        data = self.msg_bytes
+        data = encryption(self.msg_bytes)
         message_id = self.generate_message_id()
         
         # Define chunk metadata format
@@ -93,7 +93,7 @@ class JsonMessage:
 
         return messages
 
-    def reassemble(messages: list[tuple[int,bytes]]) -> JsonMessage:
+    def reassemble(messages: list[tuple[int,bytes]],decryption : function = lambda x:x) -> JsonMessage:
         """
         Reassembles the original message from serialized chunks.
 
@@ -106,5 +106,5 @@ class JsonMessage:
         full_message = b""
         for _, chunk in messages:
             full_message += base64.b64decode(chunk)
-            
+        full_message = decryption(full_message)
         return JsonMessage.deserialize(full_message)

@@ -4,9 +4,9 @@ import uuid
 from typing import Dict, Any
 from message import JsonMessage
 from buffer import Buffer
-from abc import abstractmethod
 import logging
 import time
+from encryption import EncryptionNode
 
 class Server():
     def __init__(self, name: str, host: str = '0.0.0.0', port: int = 5000,network_id:int=0) -> None:
@@ -40,6 +40,8 @@ class Server():
         
         self.locks: Dict[str, threading.Lock] = {}
         
+        self.security = EncryptionNode(username=self.name,password="password",logger=self.logger)
+        
     def handle_outgoing(self) -> None:
         while self.running:
             for server_name, messages in self.outgoing.items():
@@ -57,7 +59,7 @@ class Server():
         self.locks[server_name].release()
         
         msg=JsonMessage(messages)
-        messages=msg.split(1024)
+        messages=msg.split(1024,lambda x: self.security.encrypt_for_connection(server_name,x))
         for indx in messages:
             self.request_channels[server_name].sendall(indx)
             
@@ -116,8 +118,14 @@ class Server():
                 channel_type = message.get("channel")
                 server_name = message.get("source")
                 role = message.get("role")
+                public_key=message.get("public_key")
+                public_key=self.security.deserialize_key(public_key)
+                my_private_key,my_public_key=self.security.initialize_connection()
+                self.security.complete_connection(other_name=server_name,other_public_key=public_key,connection_private_key=my_private_key)
                 self.locks[server_name] = threading.Lock()
-                ack_message = JsonMessage({"source": self.name, "channel": channel_type, "destination": server_name, "type": "notification", "role": "server"})
+                ack_message = JsonMessage({"source": self.name, "channel": channel_type, "destination": server_name,\
+                    "type": "notification", "role": "server","public_key":self.security.serialize_key(my_public_key)})
+                ack_message = ack_message.serialize()
                 if role == "client":
                     assert channel_type == "request", "Client must connect on request channel."
                 else:
@@ -125,25 +133,25 @@ class Server():
                     assert network_id == self.network_id, "Network ID must match."
                 if channel_type == "request":
                     self.request_channels[server_name] = client_socket
-                    client_socket.sendall(ack_message.serialize())
+                    client_socket.sendall(ack_message)
                     self.logger.info(f"Request channel established with {server_name}")
-                    self._handle_request_channel(client_socket)
+                    self._handle_request_channel(client_socket,server_name)
                 elif channel_type == "gossip":
                     self.gossip_channels[server_name] = client_socket
-                    client_socket.sendall(ack_message.serialize())
+                    client_socket.sendall(ack_message)
                     self.logger.info(f"Gossip channel established with {server_name}")
-                    self._handle_gossip_channel(client_socket)
+                    self._handle_gossip_channel(client_socket,server_name)
                 elif channel_type == "transfer":
                     self.transfer_channels[server_name] = client_socket
-                    client_socket.sendall(ack_message.serialize())
+                    client_socket.sendall(ack_message)
                     self.logger.info(f"Transfer channel established with {server_name}")
-                    self._handle_transfer_channel(client_socket)
+                    self._handle_transfer_channel(client_socket,server_name)
         except Exception as e:
             self.logger.error(f"Error handling incoming connection: {e}")
         finally:
             client_socket.close()
             
-    def _handle_request_channel(self, client_socket: socket.socket) -> None:
+    def _handle_request_channel(self, client_socket: socket.socket, server_name: str) -> None:
         """Handles incoming messages on the request channel."""
         while self.running:
             try:
@@ -151,7 +159,7 @@ class Server():
                 if data:
                     complete=self.buffer.store_data(data)
                     if complete[0]:
-                        messages=JsonMessage.reassemble(complete[1])
+                        messages=JsonMessage.reassemble(complete[1],decryption=lambda x: self.security.decrypt_from_connection(server_name,x))
                     else:
                         continue
                     for message in messages:
@@ -164,7 +172,7 @@ class Server():
             except Exception as e:
                 self.logger.critical(f"Error handling request channel: {e}")
             
-    def _handle_gossip_channel(self, client_socket: socket.socket) -> None:
+    def _handle_gossip_channel(self, client_socket: socket.socket, server_name: str) -> None:
         """Handles incoming messages on the gossip channel."""
         while self.running:
             try:
@@ -172,7 +180,7 @@ class Server():
                 if data:
                     complete=self.buffer.store_data(data)
                     if complete[0]:
-                        message=JsonMessage.reassemble(complete[1])
+                        message=JsonMessage.reassemble(complete[1],decryption=lambda x: self.security.decrypt_from_connection(server_name,x))
                     else:
                         continue
                     type = message.get("type")
@@ -184,7 +192,7 @@ class Server():
             except Exception as e:
                 self.logger.critical(f"Error handling gossip channel: {e}")
             
-    def _handle_transfer_channel(self, client_socket: socket.socket) -> None:
+    def _handle_transfer_channel(self, client_socket: socket.socket, server_name: str) -> None:
         """Handles incoming messages on the transfer channel."""
         while self.running:
             try:
@@ -192,7 +200,7 @@ class Server():
                 if data:
                     complete=self.buffer.store_data(data)
                     if complete[0]:
-                        message=JsonMessage.reassemble(complete[1])
+                        message=JsonMessage.reassemble(complete[1],decryption=lambda x: self.security.decrypt_from_connection(server_name,x))
                     else:
                         continue
                     if message.get("type") == "reply":
@@ -210,6 +218,8 @@ class Server():
             for channel_type in ["request", "gossip", "transfer"]:
                 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 client_socket.connect((host, port))
+                
+                private_key,public_key=self.security.initialize_connection()
 
                 # Send initial connection message
                 init_message = JsonMessage({
@@ -217,7 +227,8 @@ class Server():
                     "source": self.name,
                     "type": "notification",
                     "role": "server",
-                    "network_id": self.network_id
+                    "network_id": self.network_id,
+                    "public_key": self.security.serialize_key(public_key)
                 })
                 client_socket.sendall(init_message.serialize())
 
@@ -225,9 +236,11 @@ class Server():
                 ack_data = client_socket.recv(1024)
                 if not ack_data:
                     raise ConnectionError("Did not receive acknowledgment from server.")
-
                 ack_message = JsonMessage.deserialize(ack_data)
                 remote_server_name = ack_message["source"]
+                remote_server_public_key=ack_message["public_key"]
+                remote_server_public_key=self.security.deserialize_key(remote_server_public_key)
+                self.security.complete_connection(other_name=remote_server_name,other_public_key=remote_server_public_key,connection_private_key=private_key)
                 self.logger.info(f"Received acknowledgment from {remote_server_name} on {channel_type} channel.")
 
                 # Store the connection temporarily by channel type
@@ -241,11 +254,11 @@ class Server():
             self.locks[remote_server_name] = threading.Lock()
             
             # Start threads to handle incoming messages
-            request_thread = threading.Thread(target=self._handle_request_channel, args=(temp_channels["request"],), daemon=True)
+            request_thread = threading.Thread(target=self._handle_request_channel, args=(temp_channels["request"],remote_server_name), daemon=True)
             request_thread.start()
-            gossip_thread = threading.Thread(target=self._handle_gossip_channel, args=(temp_channels["gossip"],), daemon=True)
+            gossip_thread = threading.Thread(target=self._handle_gossip_channel, args=(temp_channels["gossip"],remote_server_name), daemon=True)
             gossip_thread.start()
-            transfer_thread = threading.Thread(target=self._handle_transfer_channel, args=(temp_channels["transfer"],), daemon=True)
+            transfer_thread = threading.Thread(target=self._handle_transfer_channel, args=(temp_channels["transfer"],remote_server_name), daemon=True)
             transfer_thread.start()
 
             self.logger.info(f"Connected to server {remote_server_name} at {host}:{port}")
@@ -295,7 +308,7 @@ class Server():
             else:
                 socket_conn = channels[server_name]
                 msg = JsonMessage(message)
-                messages=msg.split(1024)
+                messages=msg.split(1024,lambda x: self.security.encrypt_for_connection(server_name,x))
                 for indx in messages:
                     socket_conn.sendall(indx)                
             self.logger.info(f"Sent {message} to {server_name} on {channel} channel.")

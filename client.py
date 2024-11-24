@@ -6,10 +6,12 @@ from typing import Dict, Optional
 from buffer import Buffer
 import threading
 import time
+from encryption import EncryptionNode
 
 class Client:
-    def __init__(self, name: str, host: str, port: int) -> None:
+    def __init__(self, name: str, host: str, port: int, username: str = "Testing", password: str="password") -> None:
         self.name: str = name
+        self.server=None
         self.server_host: str = host
         self.server_port: int = port
         self.client_socket: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -31,7 +33,10 @@ class Client:
         
         threading.Thread(target=self.handle_outgoing, daemon=True).start()
         
+        self.security=EncryptionNode(username=username,password=password,logger=self.logger)
+        
         self.connect()
+                
         
     def handle_outgoing(self) -> None:
         while True:
@@ -41,9 +46,8 @@ class Client:
                 messages = self.outgoing
                 self.outgoing = []
                 self.lock.release()
-                
                 msg=JsonMessage(messages)
-                messages=msg.split(1024)
+                messages=msg.split(1024,encryption= lambda x: self.security.encrypt_for_connection(self.server,x))
                 for indx in messages:
                     self.client_socket.sendall(indx)
                         
@@ -58,11 +62,14 @@ class Client:
         try:
             self.client_socket.connect((self.server_host, self.server_port))
 
+            private_key, public_key = self.security.initialize_connection()
+            
             # Send initial connection message for the request channel
             init_message = JsonMessage({
                 "channel": "request",
                 "source": self.name,
-                "role": "client"
+                "role": "client",
+                "public_key": self.security.serialize_key(public_key)
             })
             self.client_socket.sendall(init_message.serialize())
             self.lock=threading.Lock()
@@ -74,12 +81,15 @@ class Client:
                 if ack_message.get("channel") == "request" and ack_message.get("source"):
                     self.logger.info(f"Successfully established request channel with {ack_message['source']}")
                     self.server=ack_message["source"]
+                    other_public_key=self.security.deserialize_key(ack_message["public_key"])
+                    self.security.complete_connection(other_name=self.server,other_public_key=other_public_key,\
+                        connection_private_key=private_key)
                 else:
                     self.logger.error("Failed to establish request channel.")
             else:
                 self.logger.error("No acknowledgment received from server.")
         except Exception as e:
-            self.logger.error(f"Failed to connect to server {self.host}:{self.port}: {e}")
+            self.logger.error(f"Failed to connect to server {self.server_host}:{self.server_port}: {e}")
 
     def send_prompt(self, message_text: Dict[str,str]) -> Optional[Dict[str,str]]:
         """Sends a prompt message to the server."""
@@ -115,7 +125,7 @@ class Client:
                 if data:
                     complete=self.buffer.store_data(data)
                     if complete[0]:
-                        messages=JsonMessage.reassemble(complete[1])
+                        messages=JsonMessage.reassemble(complete[1],decryption=lambda x: self.security.decrypt_from_connection(self.server,x))
                     else:
                         continue
                     for message in messages:
