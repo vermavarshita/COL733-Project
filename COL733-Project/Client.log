@@ -1,0 +1,39 @@
+2024-11-24 23:48:38,460 - Client - INFO - Logging started for Client
+2024-11-24 23:48:38,461 - Client - INFO - Connection initialized. Public key generated.
+2024-11-24 23:48:38,464 - Client - INFO - Successfully established request channel with Server1
+2024-11-24 23:48:38,464 - Client - INFO - Secure connection completed with Server1.
+2024-11-24 23:48:38,465 - Client - INFO - New thread started to receive reply.
+2024-11-24 23:48:38,465 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '28783c3c-ffd6-436d-907d-7921b987df1c', 'text': 'put', 'key': 25, 'data': 'H'}
+2024-11-24 23:48:38,465 - Client - INFO - Waiting for a reply for ID 28783c3c-ffd6-436d-907d-7921b987df1c
+2024-11-24 23:48:38,670 - Client - INFO - {"id": "c768adfa-3d03-4cc5-a785-e92a76f2364e", "order": 0, "length": 1, "data": "TzlVb252Q3VNWmNER28rNEZZUy9nVEl4VlUzdnBENDRFV2JmWUNJMzgxNWtJYUR0RndrYTNWRWlZRzZYWXV5QkRWZ1JHTmlYakZQdTkvc29xSW9abzJDcDRkYkltbXdOa3lPSEJ2K1dFM1dwWjdJMFEzNFJtZzZNdGN1eE8weVR1YVB6cXdkZzN0N3FXNUd3T1hmYlFBL1htUHFBek9FNVBreWRIWDd2eXNZeThocVl5NlpMY1dDRzN6bEMwSDgzVzM3UEtrQ3pZMEdDUHdjTkVvTVhwQ2w1VjV3em1xdW9vcWVrN1RBY3VLY2tRUTloSUxvSmpqYXRVVlRyQ3QzY1RwUndTWUV2dFRNQ2ZrQ2FEYjYxYldMczg4QzlpQmwxaGt1L0YxMzJCWmVtQmJtT0RmSWZTckFSaVdJalFiM2MrRTZLS2J3MUJraTNSVzBxTXJSOE1pWHBQdFNnVzJuSnBXUHRFTEdUcTI0PQ=="}This is Here
+2024-11-24 23:48:38,671 - Client - INFO - Received reply from server: {'source': 'Server1', 'destination': 'Client', 'channel': 'request', 'type': 'reply', 'text': 'Data received', 'id': '28783c3c-ffd6-436d-907d-7921b987df1c', 'role': 'server'}
+2024-11-24 23:48:38,671 - Client - INFO - Reply added for ID 28783c3c-ffd6-436d-907d-7921b987df1c
+2024-11-24 23:48:38,671 - Client - INFO - Remaining incoming messages: 0
+2024-11-24 23:48:38,671 - Client - INFO - New thread started to receive reply.
+2024-11-24 23:48:38,671 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': 'a378b874-d4bb-4f1a-911f-acd4ef24a910', 'text': 'put', 'key': 50, 'data': 'Hello'}
+2024-11-24 23:48:38,671 - Client - INFO - Waiting for a reply for ID a378b874-d4bb-4f1a-911f-acd4ef24a910
+2024-11-24 23:48:38,774 - Client - INFO - {"id": "107c72d8-416d-4ed2-ad57-71c72c49a332", "order": 0, "length": 1, "data": "ZWhLL0t2RWNDcXU1ZzgxV1YzamhSOFROU1g5RmIyQW5VWFNydzEyMlI1bWJWMHgrT1lJcENhcnhzZldWOXE2blFZeDhZY2FwMGVacEEyY2V0UUppY2laL01HRUhOcEk0K1ZjaW1rV0dib0N4Y1VMYVZML0E5UmVQMnN0ejdwN3NxTkljYXRNaDg5T21FR29MaFp4MHRnbk1aVUpDRDlsYWQ5QjJETVNtb01vazE4UEE5b1ljOEp2cncwcnFqYlUzVWxwcWdHNzdvSVVQdE5id01ZQVVsTHc5bFpMeUJRK0FjMWhZY244ZDNxelpxRktJc2pyVjZoZm0xczhENksvOExqMEU5WFQ1ekhpSk9jaFFYQXMwVXQyRUZSNVF6QkxaRnJzSFU5cG94bE9Zc2RoZEFiRWtWVHJ1M0hwT1NDaklZRmcrK1ZURjVWRitmeWN0U0szR0tVMWZwSlBUdy9WdlJvNVovWjRFNnlVPQ=="}This is Here
+2024-11-24 23:48:38,774 - Client - INFO - Received reply from server: {'source': 'Server1', 'destination': 'Client', 'channel': 'request', 'type': 'reply', 'text': 'Data received', 'id': 'a378b874-d4bb-4f1a-911f-acd4ef24a910', 'role': 'server'}
+2024-11-24 23:48:38,774 - Client - INFO - Reply added for ID a378b874-d4bb-4f1a-911f-acd4ef24a910
+2024-11-24 23:48:38,774 - Client - INFO - Remaining incoming messages: 0
+2024-11-24 23:48:46,895 - Client - INFO - Connection closed.
+2024-11-24 23:48:46,895 - Client - INFO - Client stopped.
+2024-11-24 23:50:25,715 - Client - INFO - Logging started for Client
+2024-11-24 23:50:25,716 - Client - INFO - Connection initialized. Public key generated.
+2024-11-24 23:50:25,719 - Client - INFO - Successfully established request channel with Server1
+2024-11-24 23:50:25,720 - Client - INFO - Secure connection completed with Server1.
+2024-11-24 23:50:25,720 - Client - INFO - New thread started to receive reply.
+2024-11-24 23:50:25,720 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': '9a1d6295-a4ef-4c51-8a22-07c448b9703d', 'text': 'put', 'key': 25, 'data': 'H'}
+2024-11-24 23:50:25,720 - Client - INFO - Waiting for a reply for ID 9a1d6295-a4ef-4c51-8a22-07c448b9703d
+2024-11-24 23:50:25,926 - Client - INFO - {"id": "d1b61955-6ba9-4acd-84ae-665696149ce6", "order": 0, "length": 1, "data": "SEthWUVjS3UyRWhqNUtTVmFyQVZLSUpEZTlnN1RYeXlSU2NpNGVpVksvdVdDVS9wK3NvRTI5VG1mYW1rSi9tMS9WWE4rYnVTT0VQdlhKWUw5YzAzS2hzUHdUY1hOaTYvMEQ1Rjc3RVAzempBSWtHdGp6RTE2eVlvVFFrN1RCM055eVBQb1Y1N0VzRkk1d1YrbmZMdmk0cUNaREtoRWdGdmppcUZXWklHMTgzeGhONys0R3NrbU5iVDRucFd4N0tEMUlVaWt5QjBuSXVYWVAxQlk2bGg2dmU2RWpIZm51azMrTnN1YXlEY3M1ZnRvTnBMUFU4bE92dnI1RlJoREI4aTlxa2E0cDlXMGoyTW5hc3BvbDhXS0taMWtUN0xDby8wdWo3UERMYjRoOEN0SHNKVk5yRTlCUDhFaUx6SzZBUEZ3dHN0SVViZ2tqa21MemRYNU0xcTF5dkV0TkY4VnJ5c2RldFRkcDF6a0pVPQ=="}This is Here
+2024-11-24 23:50:25,926 - Client - INFO - Received reply from server: {'source': 'Server1', 'destination': 'Client', 'channel': 'request', 'type': 'reply', 'text': 'Data received', 'id': '9a1d6295-a4ef-4c51-8a22-07c448b9703d', 'role': 'server'}
+2024-11-24 23:50:25,926 - Client - INFO - Reply added for ID 9a1d6295-a4ef-4c51-8a22-07c448b9703d
+2024-11-24 23:50:25,926 - Client - INFO - Sent prompt to server: {'source': 'Client', 'destination': 'Server1', 'channel': 'request', 'type': 'prompt', 'id': 'cb2aa7ef-749d-4a92-abc8-1688e54cf480', 'text': 'put', 'key': 50, 'data': 'Hello'}
+2024-11-24 23:50:25,926 - Client - INFO - Remaining incoming messages: 1
+2024-11-24 23:50:25,926 - Client - INFO - Waiting for a reply for ID cb2aa7ef-749d-4a92-abc8-1688e54cf480
+2024-11-24 23:50:26,032 - Client - INFO - {"id": "2ffc1d05-ad17-4984-9fe2-3838d7151423", "order": 0, "length": 1, "data": "Tm5HaVpEcnI1ellJWGZBN3VJcWh2ZTE4L1JaQTBmaWVTcWEvWE1qTVVxZWlsSENHb1VFS3B6WUJXa3hGK1BCMXh5ajlZb0J0V0NXdjRHbFVWZE5jTmpLeVNrNTRBdmJmci85TkpyeHNhd2VKUStwcUZUR0Ztd29MaFR0UGVkYkFNTzZFcFNTM0V1L0xGK0czQUpmK3M1WHVNTGxualVXTzRsODk3b0xFZC83V3lTV250VlcrN0RzWDlzS1QvbVZCQjBDUDg0bXZlVkIzU0ZKWEJFV0FRZk1hbjhPdXhmMDhyNGcxb1BrakQ4VE9ENnQ0VUd5MEFzTnp0Uml3RS9TTE1Jb21IalNuZGVWcWR5L3BTZmtJT2wxNyszS1N1QWJLRGt5MXE4WElwSzNnQ1hYV2JSYXF3emVYUm5BZ0ZMeGw0czQvd0c0djZJek95TkFDdEVXVUluZUlqUUZmMm1uZmYvbHNGemIzeG0wPQ=="}This is Here
+2024-11-24 23:50:26,032 - Client - INFO - Received reply from server: {'source': 'Server1', 'destination': 'Client', 'channel': 'request', 'type': 'reply', 'text': 'Data received', 'id': 'cb2aa7ef-749d-4a92-abc8-1688e54cf480', 'role': 'server'}
+2024-11-24 23:50:26,032 - Client - INFO - Reply added for ID cb2aa7ef-749d-4a92-abc8-1688e54cf480
+2024-11-24 23:50:26,032 - Client - INFO - Remaining incoming messages: 0
+2024-11-24 23:50:34,249 - Client - INFO - Connection closed.
+2024-11-24 23:50:34,250 - Client - INFO - Client stopped.
