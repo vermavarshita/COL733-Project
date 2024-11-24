@@ -8,29 +8,47 @@ import time
 
 R = 2
 W = 2
+N = 3
 
 class HashRing:
-    def __init__(self, server: str, host: str, port: int, ring = None, vtime = None, network = None, vnodes = 3):
-        self.ring = ring or {}   # key: server name , value: list of tuples of range of hash values
+    def __init__(self, server: str, host: str, port: int, ring = None, vtime = None, network = None, preference_list = None, vnodes = 4):
+        self.ring = ring or {} # key: server name , value: list of tuples of range of hash values
         self.vnodes = vnodes
         self.network = network or {} # key: server name, value: tuple of host and port
         self.v_time = vtime or {}
-        self.add_node(server, host, port)
+        self.preference_list = preference_list or {} # key: range of hash values, value: list of server names in preference order
 
     def add_node(self, server: str, host, port):
         if server in self.ring:
             return
         self.v_time[server] = 1
         self.network[server] = [host, port]
+        needs_data_from = []
         if self.ring:
             self.ring[server] = []
             segments = self.get_all_segments()
             segments.sort(key=lambda x: x[0], reverse=True)
             for i in range(self.vnodes):
-                segment = segments.pop(0)
+                segment = segments[i]
                 revised_keys = [segment[1][0], (segment[1][1]+segment[1][0]-1)//2]
                 added_keys = [(segment[1][1]+segment[1][0]+1)//2, segment[1][1]]
+                l = len(self.preference_list[tuple(segment[1])])
+                self.preference_list[tuple(added_keys)] = copy.deepcopy(self.preference_list[tuple(segment[1])])
+                self.preference_list[tuple(added_keys)] = [server] + self.preference_list[tuple(added_keys)]
+                self.preference_list[tuple(revised_keys)] = copy.deepcopy(self.preference_list[tuple(segment[1])])
+                if l == N:
+                    self.preference_list[tuple(added_keys)] = self.preference_list[tuple(added_keys)][:-1]
+                    needs_data_from.append((segment[2], added_keys))
+                elif l < N:
+                    # print(self.preference_list, "preference_list1", server)
+                    self.preference_list[tuple(revised_keys)] = self.preference_list[tuple(revised_keys)] + [server]
+                    # print(self.preference_list, "preference_list1", server)
+                    needs_data_from.append((segment[2], segment[1]))
+                # print(self.preference_list, "preference_list2", server)
+                del self.preference_list[tuple(segment[1])]
+                # print(self.preference_list, "preference_list3", server)
                 self.ring[server].append(added_keys)
+                self.ring[server].sort(key=lambda x: x[0])
                 self.ring[segment[2]].remove(segment[1])
                 self.ring[segment[2]].append(revised_keys)
                 self.ring[segment[2]].sort(key=lambda x: x[0])
@@ -42,6 +60,8 @@ class HashRing:
             self.ring[server] = []
             for i in range(self.vnodes):
                 self.ring[server].append([i*(2**32)//self.vnodes, ((i+1)*(2**32)//self.vnodes)-1])
+                self.preference_list[(i*(2**32)//self.vnodes, ((i+1)*(2**32)//self.vnodes)-1)] = [server]
+        return needs_data_from
             
     def get_all_segments(self):
         segments = []
@@ -53,15 +73,19 @@ class HashRing:
     def remove_node(self, server:str):
         if server not in self.ring:
             return
-        # all_segments = self.get_all_segments()
         self.v_time[server] += 1
         del self.network[server]
+        for r in self.preference_list.keys():
+            if server in self.preference_list[r]:
+                self.preference_list[r].remove(server)
+        need_to_send_data_to = []
+        need_to_remove_data_from = []
         for i in range(self.vnodes):
             segment = self.ring[server].pop(0)
             down_node = self.get_node(segment[0]-1)
-            down = None
+            # print(segment, down_node, server, "segment, down_node, server")
             up_node = self.get_node(segment[1]+1)
-            up = None
+            # print(segment, down_node, up_node, server, "segment, down_node, up_node, server")
             if down_node:
                 for keys in self.ring[down_node]:
                     if keys[1] == segment[0]-1:
@@ -69,33 +93,44 @@ class HashRing:
                         break
             if up_node:
                 for keys in self.ring[up_node]:
-                    if keys[0] == segment[1]+1:
+                    if keys[0] == ((segment[1]+1)%2**32):
                         up = keys
                         break
+            # print(down, up, "down, up")
             if up and down:
                 if int(up[1])-int(up[0]) >= int(down[1])-int(down[0]):
                     revised_keys = [down[0], segment[1]]
-                    self.ring[down_node].remove(down)
-                    self.ring[down_node].append(revised_keys)
-                    self.ring[down_node].sort(key=lambda x: x[0])
+                    removed_keys = down
+                    node = down_node
                 else:
                     revised_keys = [segment[0], up[1]]
-                    self.ring[up_node].remove(up)
-                    self.ring[up_node].append(revised_keys)
-                    self.ring[up_node].sort(key=lambda x: x[0])
+                    removed_keys = up
+                    node = up_node
             elif up:
                 revised_keys = [segment[0], up[1]]
-                self.ring[up_node].remove(up)
-                self.ring[up_node].append(revised_keys)
-                self.ring[up_node].sort(key=lambda x: x[0])
+                removed_keys = up
+                node = up_node
             elif down:
                 revised_keys = [down[0], segment[1]]
-                self.ring[down_node].remove(down)
-                self.ring[down_node].append(revised_keys)
-                self.ring[down_node].sort(key=lambda x: x[0])
+                removed_keys = down
+                node = down_node
+            print(removed_keys, revised_keys, node, server, "removed_keys, revised_keys, node, server")
+            for temp_node in self.preference_list[tuple(segment)]:
+                if temp_node not in self.preference_list[tuple(removed_keys)]:
+                    need_to_remove_data_from.append((temp_node, segment))
+            for temp_node in self.preference_list[tuple(removed_keys)]:
+                need_to_send_data_to.append((temp_node, revised_keys))
+            self.ring[node].remove(removed_keys)
+            self.ring[node].append(revised_keys)
+            self.ring[node].sort(key=lambda x: x[0])
+            self.preference_list[tuple(revised_keys)] = copy.deepcopy(self.preference_list[tuple(removed_keys)])
+            # print(self.preference_list[tuple(removed_keys)], "preference_list", server)
+            del self.preference_list[tuple(removed_keys)]
+            del self.preference_list[tuple(segment)]
         # here, also need to ensure that it receives the data for the keys in its storage range
         # This is JUST KEY ALLCOATION, not data transfer
         del self.ring[server]
+        return need_to_send_data_to, need_to_remove_data_from
         
 
     def get_node(self, key):
@@ -105,24 +140,40 @@ class HashRing:
                     return node
         return None
     
+    def get_nodes(self, key):
+        for keys in self.preference_list.keys():
+            if key >= keys[0] and key <= keys[1]:
+                return self.preference_list[keys] 
+        return None
+    
     def to_dict(self):
         """Converts the HashRing into a JSON-serializable dictionary."""
+        def serialize_preference_list(preference_list):
+            return {str(key): value for key, value in preference_list.items()}
+        
         return {
             "ring": self.ring,
             "vnodes": self.vnodes,
             "v_time": self.v_time,
             "network": self.network,
+            "preference_list": serialize_preference_list(self.preference_list)
         }
+
 
     @classmethod
     def from_dict(cls, data):
         """Reconstructs a HashRing object from a dictionary."""
+        def deserialize_preference_list(preference_list):
+            return {eval(key): value for key, value in preference_list.items()}
+        
         obj = cls(server=None, host=None, port=None)  # Create an empty instance
         obj.ring = data["ring"]
         obj.vnodes = data["vnodes"]
         obj.v_time = data["v_time"]
         obj.network = data["network"]
+        obj.preference_list = deserialize_preference_list(data["preference_list"])
         return obj
+
     
 
 class Dynamo(Server):
@@ -139,13 +190,16 @@ class Dynamo(Server):
             ring = copy.deepcopy(hring.ring)
             network = copy.deepcopy(hring.network)
             v_time = copy.deepcopy(hring.v_time)
-            self.ring = HashRing(self.name, self.host, self.port, ring, v_time, network, hring.vnodes)
+            preference_list = copy.deepcopy(hring.preference_list)
+            self.ring = HashRing(self.name, self.host, self.port, ring, v_time, network, preference_list, hring.vnodes)
+            needs_data_from = self.ring.add_node(self.name, self.host, self.port)
             self.ring.v_time[self.seed["name"]] += 1
             # print(hring.to_dict())
             # print(self.ring.to_dict())
             self.connect_all(hring.network)
-            for key in self.ring.ring[self.name]:
-                reply = self.send_message({"source": self.name, "destination": hring.get_node(key[0]), "channel": "transfer", "type": "prompt", "text": "get_data", "role": "server", "data": (key,self.ring.to_dict())})
+            
+            for server, keys in needs_data_from:
+                reply = self.send_message({"source": self.name, "destination": server, "channel": "transfer", "type": "prompt", "text": "get_data", "role": "server", "data": (keys,self.ring.to_dict())})
                 self.logger.info(f"Received data message: {reply}")
                 if reply["data"]:
                     self.data.update(reply["data"])
@@ -153,8 +207,10 @@ class Dynamo(Server):
             hring.ring = self.ring.ring
             hring.network = self.ring.network
             hring.v_time = self.ring.v_time
+            hring.preference_list = self.ring.preference_list
         else:
             self.ring = HashRing(self.name, self.host, self.port)
+            self.ring.add_node(self.name, self.host, self.port)
         
         threading.Thread(target=self._gossip_periodically, daemon=True).start()
 
@@ -177,22 +233,42 @@ class Dynamo(Server):
                 self.send_message({"source": self.name, "destination": message["source"], "channel": "transfer", "type": "reply", "text": "seed_connect", "role": "server", "id": message.get("id"), "data": self.ring.to_dict()})
             elif message["text"] == "get_data":
                 data = self.send_data(message["data"][0], self.data)
-                for key in data:
-                    self.data.pop(key)
                 self.ring = HashRing.from_dict(message["data"][1])
+                for key in data:
+                    if self.ring.get_node(int(key)) != self.name:
+                        self.data.pop(key)
                 self.send_message({"source": self.name, "destination": message["source"], "channel": "transfer", "type": "reply", "text": "get_data", "role": "server", "id": message.get("id"), "data": data})
 
         if message.get("type") == "notification":
             if message["text"] == "remove_node":
-                ring = copy.deepcopy(self.ring.ring)
-                self.ring.remove_node(message["source"])
-                for key1, key2 in ring[message["source"]]:
-                    node = self.ring.get_node(key1)
-                    data = self.send_data([key1, key2], message["data"])
-                    reply = self.send_message({"source": self.name, "destination": node, "channel": "transfer", "type": "notification", "text": "update_data", "role": "server", "data": (data, self.ring.to_dict())})
+                send, remove = self.ring.remove_node(message["source"])
+                # print(send, remove, "send, remove", self.name) 
+                # print(message["data"], "data1", self.name)
+                for server, keys in send:
+                    data = self.send_data(keys, message["data"])
+                    # print(data, "data2", self.name, server,"server")
+                    if server == self.name:
+                        for key in data.keys():
+                            self.data[key] = data[key]
+                    else:
+                        self.send_message({"source": self.name, "destination": server, "channel": "transfer", "type": "notification", "text": "update_data", "role": "server", "data": (data, self.ring.to_dict())})
+                for server, keys in remove:
+                    data = self.send_data(keys, message["data"])
+                    # print(data, "data3", self.name)
+                    if server == self.name:
+                        for key in data.keys():
+                            if key in self.data:
+                                self.data.pop(key)
+                    else:
+                        self.send_message({"source": self.name, "destination": server, "channel": "transfer", "type": "notification", "text": "remove_data", "role": "server", "data": (data, self.ring.to_dict())})
             elif message["text"] == "update_data":
                 self.ring = HashRing.from_dict(message["data"][1])
                 self.data.update(message["data"][0])
+            elif message["text"] == "remove_data":
+                self.ring = HashRing.from_dict(message["data"][1])
+                # print(message["data"][0], "data", self.name)
+                for key in message["data"][0].keys():
+                    self.data.pop(key)
         pass
 
     def handle_request(self, message: Dict[str, Any]) -> None:
@@ -200,35 +276,103 @@ class Dynamo(Server):
         self.logger.info(f"Received request message: {message}")
         if message.get("type") == "prompt":
             key = self.hash_calc(str(message.get("key")))
-            node = self.ring.get_node(int(key))
-            # print(key,"key")
-            # print(self.ring.to_dict())
-            # print(node,"node")
-            # print(message,"message")
-            if node == self.name:
+            nodes = self.ring.get_nodes(int(key))
+            # print(nodes)
+            if self.name in nodes:
                 if message.get("text") == "put":
                     self.put_data(key, message.get("data"))
-                    reply = {"source": self.name, "destination": message.get("source"), "channel": "request", "type": "reply", "text": "Data received", "id": message.get("id"), "role": "server"}
-                    self.send_message(reply)
+                    T = min(W, len(nodes))
+                    original_id = copy.deepcopy(message.get("id"))
+                    original_source = copy.deepcopy(message.get("source"))
+                    message["source"] = self.name
+                    for node in nodes:
+                        try:
+                            print(T)
+                            if node == self.name:
+                                T-=1
+                                if T == 0:
+                                    reply = {"source": self.name, "destination": original_source, "channel": "request", "type": "reply", "text": "Data received", "id": original_id, "role": "server"}
+                                    self.send_message(reply)
+                                continue
+                            message.pop("id")
+                            message["text"] = "put_next"
+                            message["destination"] = node
+                            reply = self.send_message(message)
+                            if reply["text"] == "Data received":
+                                T -= 1
+                                # print(T)
+                                if T == 0:
+                                    reply = {"source": self.name, "destination": original_source, "channel": "request", "type": "reply", "text": "Data received", "id": original_id, "role": "server"}
+                                    self.send_message(reply)
+                                pass
+                        except Exception as e:
+                            pass
                 elif message.get("text") == "get":
                     self.logger.info(f"Data: {self.data.get(key)}")
-                    data = self.send_data([int(key), int(key)], self.data)
-                    reply = {"source": self.name, "destination": message.get("source"), "channel": "request", "type": "reply", "text": "Data received", "id": message.get("id"), "role": "server", "data": data}
+                    data = {}
+                    T = min(R, len(nodes))
+                    original_id = copy.deepcopy(message.get("id"))
+                    original_source = copy.deepcopy(message.get("source"))
+                    message["source"] = self.name
+                    for node in nodes:
+                        try:
+                            if node == self.name:
+                                dic = self.send_data([int(key), int(key)], self.data)
+                                for d in dic.keys():
+                                    if dic[d] in data:
+                                        data[dic[d]] += 1
+                                    else:
+                                        data[dic[d]] = 1
+                                    if data[dic[d]] == T:
+                                        reply = {"source": self.name, "destination": original_source, "channel": "request", "type": "reply", "text": "Data received", "id": original_id, "role": "server", "data": data}
+                                        self.send_message(reply)
+                                        break
+                                continue
+                            message.pop("id")
+                            message["destination"] = node
+                            message["text"] = "get_next"
+                            reply = self.send_message(message)
+                            if reply["text"] == "Data received":
+                                if reply["data"] in data:
+                                    data[reply["data"]] += 1
+                                else:
+                                    data[reply["data"]] = 1
+
+                                if data[reply["data"]] == T:
+                                    reply = {"source": self.name, "destination": original_source, "channel": "request", "type": "reply", "text": "Data received", "id": original_id, "role": "server", "data": reply["data"]}
+                                    self.send_message(reply)
+                                    break
+                        except Exception as e:
+                            pass
+                elif message.get("text") == "put_next":
+                    self.put_data(key, message.get("data"))
+                    reply = {"source": self.name, "destination": message["source"], "channel": "request", "type": "reply", "text": "Data received", "id": message.get("id"), "role": "server"}
+                    self.send_message(reply)
+                elif message.get("text") == "get_next":
+                    dic = self.send_data([int(key), int(key)], self.data)
+                    for d in dic.keys():
+                        data = dic[d]
+                    reply = {"source": self.name, "destination": message["source"], "channel": "request", "type": "reply", "text": "Data received", "id": message.get("id"), "role": "server", "data": data} 
                     self.send_message(reply)
             else:
                 original_source = copy.deepcopy(message.get("source"))
                 original_id = copy.deepcopy(message.get("id"))
                 message["source"] = self.name
-                message["destination"] = node
-                message.pop("id")
-                # print(message, "message")
-                reply = self.send_message(message)
-                self.logger.info(f"Received reply message: {reply}")
-                if reply["text"] == "Data received":
-                    reply["source"] = self.name
-                    reply["destination"] = original_source
-                    reply["id"] = original_id
-                    self.send_message(reply)
+                for i in range(len(nodes)):
+                    try:
+                        message.pop("id")
+                        message["destination"] = nodes[i]
+                        # print(message, "message")
+                        reply = self.send_message(message)
+                        self.logger.info(f"Received reply message: {reply}")
+                        if reply["text"] == "Data received":
+                            reply["source"] = self.name
+                            reply["destination"] = original_source
+                            reply["id"] = original_id
+                            self.send_message(reply)
+                            break
+                    except Exception as e:
+                        pass
         pass
 
     def send_data(self, keys, data_dict):
@@ -251,7 +395,6 @@ class Dynamo(Server):
     
     def stop(self):
         """Stops the server and closes all connections."""
-        super().stop()
         if self.seed:
             self.send_message({"source": self.name, "destination": self.seed["name"], "channel": "transfer", "type": "notification", "text": "remove_node", "data": self.data})
         self.running = False
